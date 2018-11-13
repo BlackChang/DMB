@@ -1,4 +1,4 @@
-package Socket2;
+package Project;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

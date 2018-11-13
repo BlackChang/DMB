@@ -1,4 +1,4 @@
-package Socket2;
+package Project;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -16,6 +16,13 @@ public class ChatClient
     JTextField textField = new JTextField(40);
     JTextArea messageArea = new JTextArea(8, 40);
     JButton bt = new JButton("Whisper");
+    
+    //Pop up Chat
+    JFrame fr = new JFrame("Special Room!");
+	JTextField tf = new JTextField(40);
+	JTextArea text = new JTextArea(8, 40);
+	//Room
+	
     public static String w="";//위스퍼가유효한지확인 위스퍼를 받을 사용자이름을 임시저장  
     private String origin; //각클라이언트를 구분할 고유한 사용자이름이다.
     public ChatClient() 
@@ -38,25 +45,22 @@ public class ChatClient
                 textField.setText("");
             }
         });
-        bt.addActionListener(new ActionListener() //위스퍼버튼을누르면 실행된다  
+        bt.addActionListener(new ActionListener() //위스퍼버튼을누르면 스페셜 채팅룸이 생성됌.
         {
     			public void actionPerformed(ActionEvent e)
     			{
-    				JFrame fr = new JFrame("Set Whisper");
-    				JTextField tf = new JTextField(40);
-    		        fr.getContentPane().add(tf, "Center");
-    		        tf.setText("Set name");
+    		        fr.getContentPane().add(tf, "North");
+    		        fr.getContentPane().add(new JScrollPane(text), "Center");
+    		        tf.setText("Enjoy your chatting");
     		        
-    		        tf.addActionListener(new ActionListener()// w에 입력받을 대상을 저장  
-    		        	{
-                		public void actionPerformed(ActionEvent e)
-                    {
-                			w = tf.getText();
-                			tf.setText("Set name");
-                			fr.setVisible(false);
-                    }
-                });
-    		        fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    		        tf.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
+    		                {
+    		                		public void actionPerformed(ActionEvent e)
+    		                		{
+    		                        out.println(tf.getText());
+    		                        tf.setText("");
+    		                    }
+    		                });
     		        fr.setVisible(true);
     		        fr.pack();
     			}
@@ -94,11 +98,11 @@ public class ChatClient
             }
             else if (line.startsWith("NAMEACCEPTED")) // 서버에서 "NAMEACCEPTEDE" 라고 시작되는 문장을받으면 본격적인 채팅을 할 수 있게된다.
             {
-            		textField.setEditable(true);
+            		tf.setEditable(true);
             }
             else if (line.startsWith("MESSAGE")) // 서버에서 "MESSAGE" 라고 시작되는 문장을받으면 MESSAGE부분을 지우고 채팅내용만을 볼수 있게된다.
             {
-            		messageArea.append(line.substring(8) + "\n");
+            		text.append(line.substring(8) + "\n");
             }
             else if (line.startsWith("WHISPER")) //// 서버에서 "WHISPER" 라고 시작되는 문장을받으면 WHISPER 함수를 사용한다. 
             {
@@ -124,10 +128,16 @@ public class ChatClient
 
     public static void main(String[] args) throws Exception 
     {
-        ChatClient client = new ChatClient();
+    		ChatClient client = new ChatClient();
         client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         client.frame.setLayout(new FlowLayout());
         client.frame.setVisible(true);
         client.run();
+        
+        ChatClient special = new ChatClient();
+        special.fr.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        special.fr.setLayout(new FlowLayout());
+        special.fr.setVisible(true);
+        special.run();
     }
 }
