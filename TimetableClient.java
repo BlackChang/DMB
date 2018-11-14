@@ -14,32 +14,11 @@ public class TimetableClient {
 
     BufferedReader in;
     PrintWriter out;
-    JFrame frame = new JFrame("Chatter");
-    JTextField textField = new JTextField(40);
-    JTextArea messageArea = new JTextArea(8, 40);
-    JButton whisper = new JButton("Whisper");
+    JFrame frame = new JFrame("8 Time in life");
     String name = "";
     public TimetableClient() {
 
-        // Layout GUI
-        frame.getContentPane().add(textField, "North");
-        //text field를 frame에 추가
-        frame.getContentPane().add(new JScrollPane(messageArea), "Center");
-        //text area를 frame에 추가
-        frame.getContentPane().add(whisper,"South");
-        //귓속말 기능 위한 whisper 버튼을 frame에 추가
-        frame.pack();
-       
         // Add Listeners
-        textField.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                out.println(name + textField.getText());
-                textField.setText("");
-                name = "";
-            }
-            //text field에 메세지 내용 입력 받아 서버에 전달
-            //name이 ""인 이유는 귓속말 여부에 상관 없이 다음 채팅에 전체 채팅으로 전환 위함
-        });        
     }
     
     private String getServerAddress() {
