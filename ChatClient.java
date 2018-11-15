@@ -49,6 +49,7 @@ public class ChatClient
         {
     			public void actionPerformed(ActionEvent e)
     			{
+    				frame.setVisible(false);
     		        fr.getContentPane().add(tf, "North");
     		        fr.getContentPane().add(new JScrollPane(text), "Center");
     		        tf.setText("Enjoy your chatting");
@@ -110,8 +111,8 @@ public class ChatClient
             }
         }
     }
- // 입력된 라인을 공백부분별로나누어 새로 저장시킨뒤 첫번째 부분은 WHISPER 문자 두번재부분은 채팅을 받을 대상자 세번쨰 이후부터 고유한 채팅내용을 갖고
- 	//마지막부분에 보낸 사람의 이름이 저장되어있어 구분할수있다.
+// 입력된 라인을 공백부분별로나누어 새로 저장시킨뒤 첫번째 부분은 WHISPER 문자 두번재부분은 채팅을 받을 대상자 세번쨰 이후부터 고유한 채팅내용을 갖고
+//마지막부분에 보낸 사람의 이름이 저장되어있어 구분할수있다.
 	private void WHISPER(String line) 
     {
         String[] temp = line.split(" ");
