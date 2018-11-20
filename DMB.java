@@ -7,167 +7,113 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 public class DMB {
-	BufferedReader in;
-	PrintWriter out;
-	static JFrame frame = new JFrame("8 times in life");
-	
+	TimetableClient send = new TimetableClient();
+	JFrame initWindow = new JFrame("8 times in life");
+	JFrame signUP = new JFrame("회원가입 정보 입력");
 	public DMB() throws IOException {
-		JTextField textField;
+		JTextField IDtextField;
 		JPasswordField passwordField;
-		frame.setBounds(100, 100, 996, 771);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
-		panel.setLayout(null);
+		initWindow.setBounds(100, 100, 996, 771);
+		initWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		JPanel iPanel = new JPanel();
+		initWindow.getContentPane().add(iPanel, BorderLayout.CENTER);
+		iPanel.setLayout(null);
 	
 		JLabel lblId = new JLabel("ID :");
 		lblId.setBounds(164, 127, 183, 104);
-		panel.add(lblId);
+		iPanel.add(lblId);
 		
-		JLabel lblPassword = new JLabel("Password :");
+		JLabel lblPassword = new JLabel("PASSWORD :");
 		lblPassword.setBounds(164, 302, 183, 104);
-		panel.add(lblPassword);
+		iPanel.add(lblPassword);
 		
-		textField = new JTextField();
-		textField.setBounds(406, 127, 310, 104);
-		panel.add(textField);
-		textField.setColumns(10);
+		IDtextField = new JTextField();
+		IDtextField.setBounds(406, 127, 310, 104);
+		iPanel.add(IDtextField);
+		IDtextField.setColumns(10);
 		
 		passwordField = new JPasswordField();
 		passwordField.setBounds(406, 302, 310, 104);
-		panel.add(passwordField);
+		iPanel.add(passwordField);
 		
 		JButton signIn = new JButton("로그인");
 		signIn.setBounds(164, 478, 191, 82);
-		panel.add(signIn);
+		iPanel.add(signIn);
 		
-		JButton signUP = new JButton("회원가입");
-		signUP.setBounds(483, 478, 224, 82);
-		panel.add(signUP);
+		JButton signUp = new JButton("회원가입");
+		signUp.setBounds(483, 478, 224, 82);
+		iPanel.add(signUp);
+						
+		signUP.setBounds(100, 100, 500, 350);
+		signUP.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
-		frame.getContentPane().add(panel, BorderLayout.CENTER);
+		JPanel contentPane = new JPanel();
+		signUP.getContentPane().add(contentPane, BorderLayout.CENTER);
+		contentPane.setLayout(null);
+
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		signUP.setContentPane(contentPane);
 		
+		JLabel idLabel = new JLabel("ID :");
+		idLabel.setBounds(100, 25, 150, 90);
+		contentPane.add(idLabel);
+
+		JLabel pwLabel = new JLabel("PASSWORD : ");
+		pwLabel.setBounds(100, 100, 150, 90);
+		contentPane.add(pwLabel);
+		
+		JTextField IDField = new JTextField();
+		IDField.setBounds(200, 35, 200, 50);
+		contentPane.add(IDField); //아이디
+		String id = IDField.getText();
+		IDField.setColumns(10);
+		
+		JPasswordField pwField = new JPasswordField();
+		pwField.setBounds(200, 110, 200, 50);
+		contentPane.add(pwField); //비번
+		String pw = pwField.getText();
+						
+		JButton btnNewButton = new JButton("가입하기");
+		btnNewButton.setBounds(200, 250, 100, 30);
+		contentPane.add(btnNewButton);
+		
+		JFrame complete = new JFrame();
+		
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				complete.setVisible(true);
+				complete.setBounds(200, 200, 200, 100);
+				JPanel panel = new JPanel();
+				complete.add(panel);
+				
+				JLabel label = new JLabel("가입이 완료되었습니다!");
+				panel.add(label);
+				
+				JButton btn = new JButton("확인");
+				panel.add(btn);
+				btn.addActionListener(new ActionListener(){			    	
+					public void actionPerformed(ActionEvent e){
+						complete.setVisible(false);
+						send.signUp(id, pw);
+						signUP.setVisible(false);
+					}			
+				});
+			}
+		});
+
 		signIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//isLoginCheck();
 			}
 		});
-		signUP.addActionListener(new ActionListener() {
+		signUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				signUP.setVisible(true);
-				//DMBinput2 nw = new DMBinput2();
-				//nw.NewScreen();								
 			}
 		});
 	}	
-	public void signUP() throws IOException {
-		JFrame signUp = new JFrame("회원가입 정보");
-		String id;
-		String pw;
-		JPanel contentPane;
-		JLabel label;
-		JPasswordField passwordField;
-		JTextField IDField;
-		JTextField PWField;
-		JTextField nameField;
-	
-		JLabel label_1;
-		JLabel label_2;
-		JButton btnNewButton;
-		
-		
-		signUp.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		signUp.setBounds(100, 100, 998, 737);
-		contentPane = new JPanel();
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		signUp.setContentPane(contentPane);
-		contentPane.setLayout(null);
-		
-		signUp.getContentPane().add(contentPane, BorderLayout.CENTER);
-		
-		JLabel lblNewLabel = new JLabel("\uC544\uC774\uB514");
-		lblNewLabel.setBounds(113, 36, 207, 90);
-		contentPane.add(lblNewLabel);
-		
-		IDField = new JTextField();
-		IDField.setBounds(364, 43, 368, 78);
-		contentPane.add(IDField); //아이디
-		id = IDField.getText();
-		IDField.setColumns(10);
-		
-		label = new JLabel("\uBE44\uBC00\uBC88\uD638");
-		label.setBounds(113, 157, 207, 90);
-		contentPane.add(label);
-		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(364, 164, 368, 78);
-		contentPane.add(passwordField); //비번
-		pw = passwordField.getText();
-		
-		nameField = new JTextField();
-		nameField.setColumns(10);
-		nameField.setBounds(364, 299, 368, 78);
-		contentPane.add(nameField); //이름
-		String name = nameField.getText();
-		
-		nameField = new JTextField();
-		nameField.setColumns(10);
-		nameField.setBounds(364, 417, 368, 78);
-		contentPane.add(IDField); //학번
-		String sn = IDField.getText();
-		
-		label_1 = new JLabel("\uC774\uB984");
-		label_1.setBounds(113, 292, 207, 90);
-		contentPane.add(label_1);
-		
-		label_2 = new JLabel("\uD559\uBC88");
-		label_2.setBounds(113, 410, 207, 90);
-		contentPane.add(label_2);
-		
-		btnNewButton = new JButton("가입하기");
-		btnNewButton.setBounds(334, 539, 255, 90);
-		contentPane.add(btnNewButton);
-
-		JFrame frame2 = new JFrame();
-		
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frame2.setVisible(true);
-				frame2.setSize(200, 200);
-				
-				JPanel panel = new JPanel();
-				frame2.add(panel);
-
-				JLabel label = new JLabel("가입이 완료되었습니다!");
-			    panel.add(label);
-	
-			    JButton btn = new JButton("확인");
-			    panel.add(btn);
-				btn.addActionListener(new ActionListener(){			    	
-				    public void actionPerformed(ActionEvent e){
-				    	frame2.setVisible(false);
-
-				    }		
-				});
-			}
-		});
-	}
-	/*public static void main(String[] args) throws Exception {
-		/*EventQueue.invokeLater(new Runnable() {
-			public void run(){
-				try {
-					DMB client = new DMB();
-					client.frame.setVisible(true);
-					client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-				} catch(Exception e) {
-					e.printStackTrace();
-				}
-			}	
-		});
-		DMB cli = new DMB();
-		cli.gogo();
-	}*/	
 }
 
 
