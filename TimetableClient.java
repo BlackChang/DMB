@@ -13,11 +13,7 @@ import javax.swing.*;
 public class TimetableClient {
     BufferedReader in;
     PrintWriter out;
-    JFrame frame = new JFrame("8 Time in life");
-    public TimetableClient() {
-        // Add Listeners
-    }
-    
+    JFrame frame = new JFrame("8 Time in life");    
     private String getServerAddress() {
         return JOptionPane.showInputDialog(
             frame,
@@ -26,15 +22,21 @@ public class TimetableClient {
             JOptionPane.QUESTION_MESSAGE);
     }
     //서버 IP주소 받기 위한 frame 생성 
-    private String signIn() {
-    	return "";
+    public void signIn(String newID, String newPW) {
+    	out.println("SIGNIN");
+    	out.println(newID);
+    	out.println(newPW);
     }
     
-    private String signUp() {
-    	return "";
+    public void signUp(String newID, String newPW) {
+    	out.println("SIGNUP");
+    	out.println(newID);
+    	out.println(newPW);
     }
-    private String getInfo() {
-    	return "";
+    public void option(String professor, String day) {
+    	out.println("OPTION");
+    	out.println(professor);
+    	out.println(day);
     }
     //사용자 정보(학번, 이름, 학년, 학기) 입력 받기 위한 frame 생성    
 
@@ -49,8 +51,9 @@ public class TimetableClient {
         //서버로 데이터 보내는 output stream
 
         DMB client = new DMB();
-        client.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        client.frame.setVisible(true);
+        client.initWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        client.initWindow.setVisible(true);
+        
         
         /*
         if(회원가입 actionListener){
@@ -60,7 +63,7 @@ public class TimetableClient {
         }
         if(로그인 actionListener){
         	out.println("SIGNIN");
-        	out.println(ID);
+        	out.println(ID);z
         	out.println(PW);
         	getInfo();
         	out.println(ID);
