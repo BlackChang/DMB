@@ -5,13 +5,14 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class ChatServer 
 {
-    private static final int PORT = 9000;//포트넘버설정  
+    private static final int PORT = 2015;//포트넘버설정  
 
-    private static HashSet<String> names = new HashSet<String>();//클라이언트에서 입력하는 이름들을 해시셋에저장하여관리한다  
+    static ArrayList<String> names = new ArrayList<String>(); 
 
     private static HashSet<PrintWriter> writers = new HashSet<PrintWriter>();//데이터를 클라이언트에 전송할준비단계이다. 
 
@@ -100,7 +101,7 @@ public class ChatServer
             }
             finally
             {
-            		for (PrintWriter writer : writers) // 사용자가 나가서 스레드가 끝났음을 모든 클라이언트에게 제
+            		for (PrintWriter writer : writers) // 사용자가 나가서 스레드가 끝났음을 모든 클라이언트에게 제공 
                 {
             			writer.println("MESSAGE " + name + " EXIT ROOM...");
                 }

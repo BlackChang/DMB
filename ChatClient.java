@@ -13,59 +13,56 @@ public class ChatClient
     BufferedReader in;
     PrintWriter out;
     JFrame frame = new JFrame("Chatter");
-    JTextField textField = new JTextField(40);
-    JTextArea messageArea = new JTextArea(8, 40);
-    JButton bt = new JButton("Whisper");
-    
-    //Pop up Chat
-    JFrame fr = new JFrame("Special Room!");
-	JTextField tf = new JTextField(40);
-	JTextArea text = new JTextArea(8, 40);
-	//Room
-	
+    JLabel label = new JLabel("Test");
+    JButton bt = new JButton("Room #1");
+    public String[] H = new String[30];
     public static String w="";//위스퍼가유효한지확인 위스퍼를 받을 사용자이름을 임시저장  
-    private String origin; //각클라이언트를 구분할 고유한 사용자이름이다.
+    private String origin; //각클라이언트를 구분할 고유한 사용자이름이다
+  //Pop up Chat
+    JFrame fr = new JFrame("Room #" + origin );
+	JTextField tf = new JTextField(20);
+	
+	JTextArea text = new JTextArea(10, 20);
+	//Room
     public ChatClient() 
     {
-        textField.setEditable(false);
-        messageArea.setEditable(false);
-        frame.getContentPane().add(textField, "North");//채팅내용을입력하는부분  
-        frame.getContentPane().add(new JScrollPane(messageArea), "Center");// 채팅내역이 보이는부분 
-        frame.getContentPane().add(bt, "South");
+    		for(int x=0;x < ChatServer.names.size();x++)
+        {
+        		H[x] = "a" + x;
+        }
+    		JList list = new JList(H);
+    		JScrollPane js = new JScrollPane(list);
+    		frame.add(js);
+        frame.setLocation(200,400);
+        frame.add(label);
+        frame.getContentPane().add(bt, "East");
+        frame.getContentPane().add(tf, "North");
+		frame.getContentPane().add(list, "Center");
         frame.pack();
+        tf.setText("Enjoy your chatting");
         
-        textField.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
-        {
-        		public void actionPerformed(ActionEvent e)
-        		{
-                if(!w.equals(""))//위스퍼대상을 확인하여 채워져있다면 위스퍼 실행  
-                		out.println("WHISPER " + w + " " + textField.getText());
-                else
-                		out.println(textField.getText());
-                textField.setText("");
-            }
-        });
-        bt.addActionListener(new ActionListener() //위스퍼버튼을누르면 스페셜 채팅룸이 생성됌.
-        {
-    			public void actionPerformed(ActionEvent e)
-    			{
-    				frame.setVisible(false);
-    		        fr.getContentPane().add(tf, "North");
-    		        fr.getContentPane().add(new JScrollPane(text), "Center");
-    		        tf.setText("Enjoy your chatting");
-    		        
-    		        tf.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
-    		                {
-    		                		public void actionPerformed(ActionEvent e)
-    		                		{
-    		                        out.println(tf.getText());
-    		                        tf.setText("");
-    		                    }
-    		                });
-    		        fr.setVisible(true);
-    		        fr.pack();
-    			}
-        });
+        bt.addActionListener(new ActionListener() //위스퍼버튼을누르면 채팅룸이 생성됌.
+    	        {
+    	    			public void actionPerformed(ActionEvent e)
+    	    			{
+    	    				
+    	    				fr.getContentPane().add(tf, "North");
+    	    				fr.getContentPane().add(list, "West");
+    	    		        fr.getContentPane().add(new JScrollPane(text), "Center");
+    	    		        tf.setText("Enjoy your chatting");
+    	    		        tf.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
+    	    		                {
+    	    		                		public void actionPerformed(ActionEvent e)
+    	    		                		{
+    	    		                			
+    	    		                        out.println(tf.getText());
+    	    		                        tf.setText("");
+    	    		                    }
+    	    		                });
+    	    		        fr.setVisible(true);
+    	    		        fr.pack();
+    	    			}
+    	        });
     }
     private String getServerAddress() // 아이피주소를 받아 서버에 접속한다.
     {
@@ -86,7 +83,7 @@ public class ChatClient
     private void run() throws IOException //스레드가 실행되는부분 
     {
         String serverAddress = getServerAddress();
-        Socket socket = new Socket(serverAddress, 9000);
+        Socket socket = new Socket(serverAddress, 2015);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         while (true) 
@@ -122,7 +119,7 @@ public class ChatClient
         		x = temp[2];
         		for(int k=3;k < temp.length-1;k++)
         			x = x + " " + temp[k];
-        		messageArea.append("<Whisper message from " + temp[temp.length-1] + " to " + w + " : " + x + ">\n");//구분지은뒤 채팅을 클라이언트에 보여준다.
+        		text.append("<Whisper message from " + temp[temp.length-1] + " to " + w + " : " + x + ">\n");//구분지은뒤 채팅을 클라이언트에 보여준다.
         		w = "";// 위스퍼가완료되면 초기화시킨다.   
         }
     }
