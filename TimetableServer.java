@@ -26,6 +26,8 @@ public class TimetableServer {
     	private String pw;
     	private int grade;
     	private int semester;
+    	private String professor;
+    	private String spaceTime;
         private Socket socket;
         private BufferedReader in;
         //클라이언트로부터 데이터 받기 위한 변수
@@ -52,21 +54,41 @@ public class TimetableServer {
     		try {
     			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             	out = new PrintWriter(socket.getOutputStream(), true);
-            	    			
+            	
             	while (true) {
-                    out.println("SIGNIN");
-                    //클라이언트에게 SUBMITID이란 메세지 보냄                        
-                    //클라이언트로부터 받은 정보(학번, 이름, 학년, 학기)를 id 변수에 저장
-                    signIn(id, pw, con);
-                    if (id == null || name == null || grade == 0 || semester == 0)
-                        return;
-                        //학번이 null이면 return
-          
-                        //클라이언트로부터 받은 학번이 기존 ArrayList에 존재하지 않으면 ArrayList에 해당 학번 추가
-                	out.println("SUBMITOPTION");
-                	out.println("INFOACCEPTED");
+                    String line = in.readLine();
+                    //서버로부터 데이터 읽어와 line 변수에 저장
+            	    if (line.startsWith("SIGNUP")) {
+                        id = in.readLine(); 
+                        pw = in.readLine();
+                        signUp(id, pw, con);
+                        //서버로부터 읽어온 데이터가 SUBMITNAME일 때 getName함수 이용에 사용자 이름 입력 받음
+                    }
+                    else if(line.startsWith("SIGNIN")) {
+                    	id = in.readLine();
+                    	pw = in.readLine();
+                        signIn(id, pw, con);                	
+                        line = in.readLine();
+                        name = in.readLine();
+                    	grade = in.read();
+                    	semester = in.read();
+                        if (name == null || grade == 0 || semester == 0)
+                            return;
+                        info(id, name, grade, semester, con);
+                    }
+                    else if(line.startsWith("INFO")) {
+                    	name = in.readLine();
+                    	grade = in.read();
+                    	semester = in.read();
+                        if (name == null || grade == 0 || semester == 0)
+                            return;
+                            //학번이 null이면 return
+                  }
+                    else if(line.startsWith("OPTION")) {
+                    	professor = in.readLine();
+                    	spaceTime = in.readLine();
+                    }                
                 }                    
-            	//클라이언트에게 이름 받았다는 의미의 NAMEACEPTED 보냄
     	    } catch (IOException e) {
     	    	System.out.println(e);
     	    } catch(SQLException e) {
@@ -84,18 +106,42 @@ public class TimetableServer {
             ResultSet rs = null;
             try {
                String sql = null;
-               sql = "select ID from id_pw where ID='" + ID + "'";
+               sql = "select ID from id_pw where ID=(?)";
                ps = con.prepareStatement(sql);
+               ps.setString(1, ID);
                rs = ps.executeQuery();
-
                if(rs.next()) {
+            	   out.println("Duplicate ID");
             	   //경고문 : 이미 가입되어 있습니다.
                }   
                else { //새로운 아이디와 비밀번호 DB에 저장
             	   String signUP = null;
-            	   signUP = "insert into id_pw values('" + ID + "', '" + PW + "')";
+                   signUP = "insert into id_pw values(?,?)";
             	   ps = con.prepareStatement(signUP);
-            	   ps.executeQuery();
+                   ps.setString(1, ID);
+                   ps.setString(2, PW);
+             	   ps.executeUpdate();
+             	   out.println("COMPLETE");
+               }
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+        }
+        public void signIn(String ID, String PW, Connection con) throws SQLException {
+        	PreparedStatement ps = null;
+            ResultSet rs = null;
+            try {
+               String sql = null;
+               sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "' and PW='" + PW +"'";
+               ps = con.prepareStatement(sql);
+               rs = ps.executeQuery();
+
+               if (rs.next()) {
+                  name = rs.getString(1);
+                  names.add(name);
+               } 
+               else {
+            	   //WARNINGS : Non ID or PW	
                }
             } catch (SQLException e) {
             	e.printStackTrace();
@@ -107,7 +153,7 @@ public class TimetableServer {
             int name_duplicate = 0;
             try {
                String sql = null;
-               sql = "select count(name) from userinfo where NAME='" + name + "'";
+               sql = "select name from userinfo where NAME='" + name + "'";
                ps = con.prepareStatement(sql);
                rs = ps.executeQuery();
                
@@ -124,25 +170,8 @@ public class TimetableServer {
                ps.setInt(3, grade);
                ps.setInt(4, semester);
                
-               ps.executeQuery();            		   
+               ps.executeUpdate();            		   
             } catch(SQLException e) {
-            	e.printStackTrace();
-            }
-        }
-        public void signIn(String ID, String PW, Connection con) throws SQLException {
-        	PreparedStatement ps = null;
-            ResultSet rs = null;
-            try {
-               String sql = null;
-               sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "' and PW='" + PW +"'";
-               ps = con.prepareStatement(sql);
-               rs = ps.executeQuery();
-
-               while (rs.next()) {
-                  name = rs.getString(1);
-                  names.add(name);
-               }   
-            } catch (SQLException e) {
             	e.printStackTrace();
             }
         }
