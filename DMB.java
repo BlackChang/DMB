@@ -10,6 +10,12 @@ public class DMB {
 	TimetableClient send = new TimetableClient();
 	JFrame initWindow = new JFrame("8 times in life");
 	JFrame signUP = new JFrame("회원가입 정보 입력");
+	String id;
+	String pw;
+	String name;
+	String prof;
+	String day;
+	private String status;
 	public DMB() throws IOException {
 		JTextField IDtextField;
 		JPasswordField passwordField;
@@ -67,40 +73,30 @@ public class DMB {
 		JTextField IDField = new JTextField();
 		IDField.setBounds(200, 35, 200, 50);
 		contentPane.add(IDField); //아이디
-		String id = IDField.getText();
+		//id = IDField.getText();
 		IDField.setColumns(10);
 		
 		JPasswordField pwField = new JPasswordField();
 		pwField.setBounds(200, 110, 200, 50);
 		contentPane.add(pwField); //비번
-		String pw = pwField.getText();
-						
-		JButton btnNewButton = new JButton("가입하기");
-		btnNewButton.setBounds(200, 250, 100, 30);
-		contentPane.add(btnNewButton);
+		//pw = pwField.getText();
+
+		JButton signUpButton = new JButton("가입하기");
+		signUpButton.setBounds(200, 250, 100, 30);
+		contentPane.add(signUpButton);
 		
-		JFrame complete = new JFrame();
-		
-		btnNewButton.addActionListener(new ActionListener() {
+	
+		signUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				complete.setVisible(true);
-				complete.setBounds(200, 200, 200, 100);
-				JPanel panel = new JPanel();
-				complete.add(panel);
+				status = "SIGNUP";
+				id = IDField.getText();
+				pw = pwField.getText();		
 				
-				JLabel label = new JLabel("가입이 완료되었습니다!");
-				panel.add(label);
-				
-				JButton btn = new JButton("확인");
-				panel.add(btn);
-				btn.addActionListener(new ActionListener(){			    	
-					public void actionPerformed(ActionEvent e){
-						complete.setVisible(false);
-						send.signUp(id, pw);
-						signUP.setVisible(false);
-					}			
-				});
-			}
+				TimetableClient.client.signUp(id, pw);
+            	
+            	IDField.setText("");
+            	pwField.setText("");
+	       }
 		});
 
 		signIn.addActionListener(new ActionListener() {
@@ -111,6 +107,7 @@ public class DMB {
 		signUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				signUP.setVisible(true);
+				initWindow.setVisible(false);
 			}
 		});
 	}	
