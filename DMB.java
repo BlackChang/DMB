@@ -7,7 +7,6 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 public class DMB {
-	TimetableClient send = new TimetableClient();
 	JFrame initWindow = new JFrame("8 times in life");
 	JFrame signUP = new JFrame("회원가입 정보 입력");
 	String id;
@@ -15,93 +14,145 @@ public class DMB {
 	String name;
 	String prof;
 	String day;
-	private String status;
 	public DMB() throws IOException {
 		JTextField IDtextField;
 		JPasswordField passwordField;
 		
-		initWindow.setBounds(100, 100, 996, 771);
+		initWindow.setBounds(100, 100, 320, 500);
 		initWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+
 		JPanel iPanel = new JPanel();
 		initWindow.getContentPane().add(iPanel, BorderLayout.CENTER);
 		iPanel.setLayout(null);
-	
-		JLabel lblId = new JLabel("ID :");
-		lblId.setBounds(164, 127, 183, 104);
-		iPanel.add(lblId);
+		iPanel.setBackground(Color.white);			
 		
-		JLabel lblPassword = new JLabel("PASSWORD :");
-		lblPassword.setBounds(164, 302, 183, 104);
-		iPanel.add(lblPassword);
+		JLabel icon = new JLabel(new ImageIcon("icon.png"));
+		icon.setBounds(50,30,200,200);
+		iPanel.add(icon);
+		
+		
+		JLabel lblId = new JLabel("아이디");
+		lblId.setBounds(50, 260, 50, 30);
+		iPanel.add(lblId);
+		lblId.setFont(new Font("배달의민족 도현", Font.PLAIN, 15));
+		lblId.setForeground(new Color(222,110,70));
 		
 		IDtextField = new JTextField();
-		IDtextField.setBounds(406, 127, 310, 104);
+		IDtextField.setBounds(50, 290, 200, 30);
 		iPanel.add(IDtextField);
 		IDtextField.setColumns(10);
 		
+		JLabel lblPassword = new JLabel("비밀번호");
+		lblPassword.setBounds(50, 330, 100, 30);
+		iPanel.add(lblPassword);
+		lblPassword.setFont(new Font("배달의민족 도현", Font.PLAIN, 15));
+		lblPassword.setForeground(new Color(222,110,70));
+		
 		passwordField = new JPasswordField();
-		passwordField.setBounds(406, 302, 310, 104);
+		passwordField.setBounds(50, 360, 200, 30);
 		iPanel.add(passwordField);
 		
 		JButton signIn = new JButton("로그인");
-		signIn.setBounds(164, 478, 191, 82);
+		signIn.setBounds(50, 395, 95, 30);
 		iPanel.add(signIn);
+		signIn.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
+		signIn.setBorderPainted(false);
+		signIn.setBackground(new Color(222,110,70));
+		signIn.setForeground(Color.white);
 		
 		JButton signUp = new JButton("회원가입");
-		signUp.setBounds(483, 478, 224, 82);
+		signUp.setBounds(155, 395, 95, 30);
 		iPanel.add(signUp);
+		signUp.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
+		signUp.setBorderPainted(false);
+		signUp.setBackground(new Color(222,110,70));
+		signUp.setForeground(Color.white);
 						
-		signUP.setBounds(100, 100, 500, 350);
+		signUP.setBounds(100, 100, 275, 330);
 		signUP.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JPanel contentPane = new JPanel();
 		signUP.getContentPane().add(contentPane, BorderLayout.CENTER);
+		contentPane.setBackground(Color.white);
 		contentPane.setLayout(null);
 
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		signUP.setContentPane(contentPane);
 		
-		JLabel idLabel = new JLabel("ID :");
-		idLabel.setBounds(100, 25, 150, 90);
+		JLabel idLabel = new JLabel("아이디");
+		idLabel.setBounds(30, 30, 100, 30);
+		idLabel.setFont(new Font("배달의민족 도현", Font.PLAIN, 15));
+		idLabel.setForeground(new Color(222,110,70));
 		contentPane.add(idLabel);
 
-		JLabel pwLabel = new JLabel("PASSWORD : ");
-		pwLabel.setBounds(100, 100, 150, 90);
+		JTextField IDField = new JTextField();
+		IDField.setBounds(30, 60, 200, 30);
+		contentPane.add(IDField); //아이디
+		IDField.setColumns(9);
+
+		JLabel pwLabel = new JLabel("비밀번호");
+		pwLabel.setBounds(30, 90, 100, 30);
+		pwLabel.setFont(new Font("배달의민족 도현", Font.PLAIN, 15));
+		pwLabel.setForeground(new Color(222,110,70));
 		contentPane.add(pwLabel);
 		
-		JTextField IDField = new JTextField();
-		IDField.setBounds(200, 35, 200, 50);
-		contentPane.add(IDField); //아이디
-		//id = IDField.getText();
-		IDField.setColumns(10);
-		
 		JPasswordField pwField = new JPasswordField();
-		pwField.setBounds(200, 110, 200, 50);
+		pwField.setBounds(30, 120, 200, 30);
 		contentPane.add(pwField); //비번
-		//pw = pwField.getText();
+		
+		JLabel nameLabel = new JLabel("이름");
+		nameLabel.setBounds(30, 150, 100, 30);
+		nameLabel.setFont(new Font("배달의민족 도현", Font.PLAIN, 15));
+		nameLabel.setForeground(new Color(222,110,70));
+		contentPane.add(nameLabel);		
+		
+		JTextField nameField = new JTextField();
+		nameField.setBounds(30, 180, 200, 30);
+		contentPane.add(nameField); //이름
+		nameField.setColumns(30);
 
 		JButton signUpButton = new JButton("가입하기");
-		signUpButton.setBounds(200, 250, 100, 30);
+		signUpButton.setBounds(30, 220, 200, 30);
+		signUpButton.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
+		signUpButton.setBorderPainted(false);
+		signUpButton.setBackground(new Color(222,110,70));
+		signUpButton.setForeground(Color.white);
 		contentPane.add(signUpButton);
+
 		
 	
 		signUpButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				status = "SIGNUP";
 				id = IDField.getText();
-				pw = pwField.getText();		
+				pw = pwField.getText();
+				name = nameField.getText();
 				
-				TimetableClient.client.signUp(id, pw);
+				if(id.length()!=9) {
+				   	JOptionPane.showMessageDialog(null, "ID를 학번 양식으로 입력해주세요.", "TOO SHORT ID",
+    						JOptionPane.WARNING_MESSAGE);	
+				}
+				else if(pw.length() < 5) {
+				   	JOptionPane.showMessageDialog(null, "PW를 5자리 이상 입력해주세요.", "TOO SHORT PW",
+    						JOptionPane.WARNING_MESSAGE);	
+				}
+				else if(name.length() == 0) {
+				   	JOptionPane.showMessageDialog(null, "이름을 입력해주세요.", "TOO SHORT NAME",
+    						JOptionPane.WARNING_MESSAGE);	
+				}
+				else
+					TimetableClient.client.signUp(id, pw, name);
             	
             	IDField.setText("");
             	pwField.setText("");
-	       }
+            	nameField.setText("");
+			}
 		});
 
 		signIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//isLoginCheck();
+				id = IDtextField.getText();
+				pw = passwordField.getText();
+				
+				TimetableClient.client.signIn(id, pw);
 			}
 		});
 		signUp.addActionListener(new ActionListener() {
