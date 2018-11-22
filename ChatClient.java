@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class ChatClient
 {
@@ -15,29 +16,24 @@ public class ChatClient
     JFrame frame = new JFrame("Chatter");
     JLabel label = new JLabel("Test");
     JButton bt = new JButton("Room #1");
-    public String[] H = new String[30];
+   
+    DefaultListModel<String> model = new DefaultListModel<String>();
+    JList list;
+    
+    ArrayList<String> chatList = new ArrayList<String>();
+    int count = 0;
     public static String w="";//위스퍼가유효한지확인 위스퍼를 받을 사용자이름을 임시저장  
     private String origin; //각클라이언트를 구분할 고유한 사용자이름이다
   //Pop up Chat
-    JFrame fr = new JFrame("Room #" + origin );
+    JFrame fr = new JFrame("Room #" );
 	JTextField tf = new JTextField(20);
-	
 	JTextArea text = new JTextArea(10, 20);
 	//Room
     public ChatClient() 
     {
-    		for(int x=0;x < ChatServer.names.size();x++)
-        {
-        		H[x] = "a" + x;
-        }
-    		JList list = new JList(H);
-    		JScrollPane js = new JScrollPane(list);
-    		frame.add(js);
         frame.setLocation(200,400);
-        frame.add(label);
-        frame.getContentPane().add(bt, "East");
+        frame.getContentPane().add(bt, "West");
         frame.getContentPane().add(tf, "North");
-		frame.getContentPane().add(list, "Center");
         frame.pack();
         tf.setText("Enjoy your chatting");
         
@@ -45,16 +41,16 @@ public class ChatClient
     	        {
     	    			public void actionPerformed(ActionEvent e)
     	    			{
-    	    				
+    	    				list = new JList(model);
+    	        			fr.getContentPane().add(list, "East");
     	    				fr.getContentPane().add(tf, "North");
-    	    				fr.getContentPane().add(list, "West");
     	    		        fr.getContentPane().add(new JScrollPane(text), "Center");
     	    		        tf.setText("Enjoy your chatting");
+    	    		        
     	    		        tf.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
     	    		                {
     	    		                		public void actionPerformed(ActionEvent e)
     	    		                		{
-    	    		                			
     	    		                        out.println(tf.getText());
     	    		                        tf.setText("");
     	    		                    }
@@ -102,6 +98,10 @@ public class ChatClient
             {
             		text.append(line.substring(8) + "\n");
             }
+            else if (line.startsWith("LIST"))
+            {
+            		chatList(line);
+            }
             else if (line.startsWith("WHISPER")) //// 서버에서 "WHISPER" 라고 시작되는 문장을받으면 WHISPER 함수를 사용한다. 
             {
             		WHISPER(line);
@@ -110,9 +110,9 @@ public class ChatClient
     }
 // 입력된 라인을 공백부분별로나누어 새로 저장시킨뒤 첫번째 부분은 WHISPER 문자 두번재부분은 채팅을 받을 대상자 세번쨰 이후부터 고유한 채팅내용을 갖고
 //마지막부분에 보낸 사람의 이름이 저장되어있어 구분할수있다.
-	private void WHISPER(String line) 
+    private void WHISPER(String line) 
     {
-        String[] temp = line.split(" ");
+    		String[] temp = line.split(" ");
 		String x = null;
     		if((temp[1].equalsIgnoreCase(origin) || temp[temp.length-1].equalsIgnoreCase(origin))&& temp[0].equals("WHISPER"))
         {
@@ -122,6 +122,24 @@ public class ChatClient
         		text.append("<Whisper message from " + temp[temp.length-1] + " to " + w + " : " + x + ">\n");//구분지은뒤 채팅을 클라이언트에 보여준다.
         		w = "";// 위스퍼가완료되면 초기화시킨다.   
         }
+    }
+    private void chatList(String line) 
+    {
+    		line = line.substring(5);
+    		if (line.startsWith("+"))
+    		{
+    			line = line.substring(2);
+    			chatList.add(line);
+    			count++;
+    			model.addElement(chatList.get(count-1));
+    		}
+    		else if(line.startsWith("-"))
+    		{
+    			line = line.substring(2);
+    			model.removeElementAt(chatList.indexOf(line));
+    			chatList.remove(line);
+    			count--;
+    		}
     }
 
     public static void main(String[] args) throws Exception 
