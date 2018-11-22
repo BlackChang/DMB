@@ -41,7 +41,7 @@ public class TimetableServer {
         	Connection con = null;
     		try {
     			Class.forName("com.mysql.jdbc.Driver");
-    			String url = "jdbc:mysql://localhost/timedb?useUnicode=true&characterEncoding=UTF8";
+    			String url = "jdbc:mysql://localhost/timedb";
     			String user = "root"; 
     			String pw = "12345";
     			con = (Connection) DriverManager.getConnection(url, user, pw);
@@ -68,8 +68,7 @@ public class TimetableServer {
                     else if(line.startsWith("SIGNIN")) {
                     	id = in.readLine();
                     	pw = in.readLine();
-                        signIn(id, pw, con);
-                        
+                        signIn(id, pw, con);         
                     }
                     else if(line.startsWith("INFO")) {
                     	name = in.readLine();
@@ -129,12 +128,12 @@ public class TimetableServer {
             ResultSet rs = null;
             try {
                String sql = null;
-               sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "'";
+               sql = "select NAME from id_pw where ID='" + ID + "'";
                ps = con.prepareStatement(sql);
                rs = ps.executeQuery();
 
                if (rs.next()) {
-                  sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "' and PW='" + PW + "'";
+                  sql = "select NAME from id_pw where ID='" + ID + "' and PW='" + PW + "'";
                   ps = con.prepareStatement(sql);
                   rs = ps.executeQuery();
                   if(rs.next()) {
