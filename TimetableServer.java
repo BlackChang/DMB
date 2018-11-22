@@ -41,7 +41,7 @@ public class TimetableServer {
         	Connection con = null;
     		try {
     			Class.forName("com.mysql.jdbc.Driver");
-    			String url = "jdbc:mysql://localhost/timedb";
+    			String url = "jdbc:mysql://localhost/timedb?useUnicode=true&characterEncoding=UTF8";
     			String user = "root"; 
     			String pw = "12345";
     			con = (Connection) DriverManager.getConnection(url, user, pw);
@@ -61,20 +61,15 @@ public class TimetableServer {
             	    if (line.startsWith("SIGNUP")) {
                         id = in.readLine(); 
                         pw = in.readLine();
-                        signUp(id, pw, con);
+                        name = in.readLine();
+                        signUp(id, pw, name, con);
                         //서버로부터 읽어온 데이터가 SUBMITNAME일 때 getName함수 이용에 사용자 이름 입력 받음
                     }
                     else if(line.startsWith("SIGNIN")) {
                     	id = in.readLine();
                     	pw = in.readLine();
-                        signIn(id, pw, con);                	
-                        line = in.readLine();
-                        name = in.readLine();
-                    	grade = in.read();
-                    	semester = in.read();
-                        if (name == null || grade == 0 || semester == 0)
-                            return;
-                        info(id, name, grade, semester, con);
+                        signIn(id, pw, con);
+                        
                     }
                     else if(line.startsWith("INFO")) {
                     	name = in.readLine();
@@ -83,7 +78,8 @@ public class TimetableServer {
                         if (name == null || grade == 0 || semester == 0)
                             return;
                             //학번이 null이면 return
-                  }
+                        info(id, name, grade, semester, con);
+                    }
                     else if(line.startsWith("OPTION")) {
                     	professor = in.readLine();
                     	spaceTime = in.readLine();
@@ -101,7 +97,7 @@ public class TimetableServer {
     	    	e.printStackTrace();
     	    }
         }
-        public void signUp(String ID, String PW, Connection con) throws SQLException {
+        public void signUp(String ID, String PW, String NAME, Connection con) throws SQLException {
         	PreparedStatement ps = null;
             ResultSet rs = null;
             try {
@@ -116,10 +112,11 @@ public class TimetableServer {
                }   
                else { //새로운 아이디와 비밀번호 DB에 저장
             	   String signUP = null;
-                   signUP = "insert into id_pw values(?,?)";
+                   signUP = "insert into id_pw values(?,?,?)";
             	   ps = con.prepareStatement(signUP);
                    ps.setString(1, ID);
                    ps.setString(2, PW);
+                   ps.setString(3, NAME);
              	   ps.executeUpdate();
              	   out.println("COMPLETE");
                }
@@ -132,16 +129,24 @@ public class TimetableServer {
             ResultSet rs = null;
             try {
                String sql = null;
-               sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "' and PW='" + PW +"'";
+               sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "'";
                ps = con.prepareStatement(sql);
                rs = ps.executeQuery();
 
                if (rs.next()) {
-                  name = rs.getString(1);
-                  names.add(name);
+                  sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "' and PW='" + PW + "'";
+                  ps = con.prepareStatement(sql);
+                  rs = ps.executeQuery();
+                  if(rs.next()) {
+                	  name = rs.getString(1);
+                      names.add(name);
+                      out.println("SIGNIN");
+                  }
+                  else
+                	  out.println("WRONGPW");
                } 
                else {
-            	   //WARNINGS : Non ID or PW	
+            	   out.println("NOTEXIST");
                }
             } catch (SQLException e) {
             	e.printStackTrace();

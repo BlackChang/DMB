@@ -48,17 +48,30 @@ public class TimetableClient {
             status = in.readLine();
         	System.out.println(status);
             if(status.startsWith("Duplicate ID")) {
-				JOptionPane.showMessageDialog(null, "Entered ID already Signed up.", "ID Duplication",
+				JOptionPane.showMessageDialog(null, "이미 있는 ID입니다.", "ID Duplication",
 						JOptionPane.WARNING_MESSAGE);
 
             }
             else if(status.startsWith("COMPLETE")) {
-            	JOptionPane.showMessageDialog(null, "ID is created successfully.", "COMPLETE",
-						JOptionPane.INFORMATION_MESSAGE);
-            	
+            	JOptionPane.showMessageDialog(null, "ID가 생성되었습니다", "COMPLETE",
+						JOptionPane.INFORMATION_MESSAGE);	
             	cli.signUP.dispose();
             	cli.initWindow.setVisible(true);
             }
+            else if(status.startsWith("SIGNIN")) {
+               	JOptionPane.showMessageDialog(null, "로그인 되었습니다.", "LOG IN",
+        						JOptionPane.INFORMATION_MESSAGE);
+               	cli.initWindow.dispose();
+            }
+            else if(status.startsWith("NOTEXIST")) {
+               	JOptionPane.showMessageDialog(null, "ID가 존재하지 않습니다.", "ID NOT EXISTS",
+        						JOptionPane.WARNING_MESSAGE);	
+            }
+            else if(status.startsWith("WRONGPW")) {
+               	JOptionPane.showMessageDialog(null, "비밀번호가 맞지 않습니다.", "WRONG PASSWORD",
+        						JOptionPane.WARNING_MESSAGE);	
+            }
+
         }
         
         /*
@@ -90,10 +103,11 @@ public class TimetableClient {
     	out.println(newPW);
     }
     
-    public void signUp(String newID, String newPW) {
+    public void signUp(String newID, String newPW, String newName) {
     	out.println("SIGNUP");
     	out.println(newID);
-    	out.println(newPW);;
+    	out.println(newPW);
+    	out.println(newName);
     }
     public void option(String professor, String day) {
     	out.println("OPTION");
