@@ -7,7 +7,7 @@ import com.mysql.jdbc.Connection;
 public class TimetableServer {
     private static final int PORT = 9001;
 
-    private static ArrayList<String> names = new ArrayList<String>();
+    static ArrayList<String> names = new ArrayList<String>();
     //클라이언트들의 이름을 저장해놓은 ArrayList
   
 	public static void main(String[] args) throws Exception{
@@ -24,10 +24,10 @@ public class TimetableServer {
     	private String id;
     	private String name;
     	private String pw;
-    	private int grade;
-    	private int semester;
-    	private String professor;
-    	private String spaceTime;
+    	private String grade;
+    	private String semester;
+    	private String prof;
+    	private String restTime;
         private Socket socket;
         private BufferedReader in;
         //클라이언트로부터 데이터 받기 위한 변수
@@ -71,18 +71,15 @@ public class TimetableServer {
                         signIn(id, pw, con);         
                     }
                     else if(line.startsWith("INFO")) {
-                    	name = in.readLine();
-                    	grade = in.read();
-                    	semester = in.read();
-                        if (name == null || grade == 0 || semester == 0)
-                            return;
-                            //학번이 null이면 return
-                        info(id, name, grade, semester, con);
+                    	grade = in.readLine();
+                    	semester = in.readLine();
+                        info(this.id, grade, semester, con);
                     }
                     else if(line.startsWith("OPTION")) {
-                    	professor = in.readLine();
-                    	spaceTime = in.readLine();
+                    	prof = in.readLine();
+                    	restTime = in.readLine();
                     }                
+            	    
                 }                    
     	    } catch (IOException e) {
     	    	System.out.println(e);
@@ -151,30 +148,30 @@ public class TimetableServer {
             	e.printStackTrace();
             }
         }
-        public void info(String ID, String name, int grade, int semester, Connection con) {
+        public void info(String ID, String Grade, String Semester, Connection con) {
         	PreparedStatement ps = null;
         	ResultSet rs = null;
-            int name_duplicate = 0;
             try {
-               String sql = null;
-               sql = "select name from userinfo where NAME='" + name + "'";
-               ps = con.prepareStatement(sql);
-               rs = ps.executeQuery();
+            	Integer.parseInt(Grade);
+            	Integer.parseInt(Semester);
+            	String sql = null;
+            	sql = "select id from created_table where grade ='" + Integer.parseInt(Grade) + "' and semester = '" +  Integer.parseInt(Semester) + "'";
+            	ps = con.prepareStatement(sql);
+            	rs = ps.executeQuery();
                
-               while(rs.next())
-            	   name_duplicate++; //중복되는 이름 세기
-               
-               if(name_duplicate > 0)
-            	   name = name.concat(Integer.toString(name_duplicate));
-               
-               sql = "insert into userinfo values(?,?,?,?)";
-               ps = con.prepareStatement(sql);
-               ps.setString(1, ID);
-               ps.setString(2, name);
-               ps.setInt(3, grade);
-               ps.setInt(4, semester);
-               
-               ps.executeUpdate();            		   
+            	if(rs.next())
+            		out.println("EXISTTABLE"); 
+            	else
+            		out.println("NEWTABLE");
+            	/*else {
+            		sql = "insert into created_table values(?,?,?)";
+            		ps = con.prepareStatement(sql);
+            		ps.setString(1, ID); 
+            		ps.setInt(2, Integer.parseInt(Grade));
+            		ps.setInt(3, Integer.parseInt(Semester));
+            		ps.executeUpdate();            		   
+            		out.println("NEWTABLE");
+               } */              
             } catch(SQLException e) {
             	e.printStackTrace();
             }

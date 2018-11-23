@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 import javax.swing.*;
 
 public class TimetableClient {
@@ -44,6 +43,11 @@ public class TimetableClient {
         cli.initWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         cli.initWindow.setVisible(true);
         
+        DMB_INFO info = new DMB_INFO();
+       	info.infoWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+       	
+       	DMB_OPTION option = new DMB_OPTION();
+       	option.optionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         while(true) {
             status = in.readLine();
         	System.out.println(status);
@@ -59,9 +63,8 @@ public class TimetableClient {
             	cli.initWindow.setVisible(true);
             }
             else if(status.startsWith("SIGNIN")) {
-               	JOptionPane.showMessageDialog(null, "로그인 되었습니다.", "LOG IN",
-        						JOptionPane.INFORMATION_MESSAGE);
-               	cli.initWindow.dispose();
+             	cli.initWindow.dispose();
+               	info.infoWindow.setVisible(true);
             }
             else if(status.startsWith("NOTEXIST")) {
                	JOptionPane.showMessageDialog(null, "ID가 존재하지 않습니다.", "ID NOT EXISTS",
@@ -71,9 +74,16 @@ public class TimetableClient {
                	JOptionPane.showMessageDialog(null, "비밀번호가 맞지 않습니다.", "WRONG PASSWORD",
         						JOptionPane.WARNING_MESSAGE);	
             }
-
+            else if(status.startsWith("EXISTTABLE")) {
+            	JOptionPane.showMessageDialog(null, "여기 있다 테이블", "TIMETABLE",
+						JOptionPane.INFORMATION_MESSAGE);
+            }
+            else if(status.startsWith("NEWTABLE")) {
+            	option.optionWindow.setVisible(true);
+            }
+   
         }
-        
+     
         /*
         if(회원가입 actionListener){
         	out.println("SIGNUP");
@@ -108,6 +118,11 @@ public class TimetableClient {
     	out.println(newID);
     	out.println(newPW);
     	out.println(newName);
+    }
+    public void getInfo(String newGrade, String newSemester) {
+    	out.println("INFO");
+    	out.println(newGrade);
+    	out.println(newSemester);
     }
     public void option(String professor, String day) {
     	out.println("OPTION");
