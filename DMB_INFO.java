@@ -1,24 +1,13 @@
 package Network_DMB;
 import java.awt.*;
 import java.io.*;
-import java.net.Socket;
-import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 public class DMB_INFO {
-	JFrame infoWindow = new JFrame("8 times in life");
-	String id;
-	String pw;
-	String name;
-	String prof;
-	String day;
-	int grade;
-	int semester;
-	public DMB_INFO() throws IOException {
-		JTextField IDtextField;
-		JPasswordField passwordField;
-		
+	static JFrame infoWindow = new JFrame("INFO");
+	String grade;
+	String semester;
+	public DMB_INFO() throws IOException {		
 		infoWindow.setBounds(100, 100, 490, 250);
 		infoWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -68,23 +57,25 @@ public class DMB_INFO {
 		check.setBackground(new Color(222,110,70));
 		check.setForeground(Color.white);
 
+		grade = gradeBox.getSelectedItem().toString();
+		semester = semBox.getSelectedItem().toString();
+
 		gradeBox.addItemListener(new ItemListener(){
 			public void itemStateChanged(ItemEvent ev) {
-				String grd = ev.getItem().toString();
-				grade = Integer.parseInt(grd);				
+				grade = ev.getItem().toString();			
 			}
 		});		
 		semBox.addItemListener(new ItemListener(){
 			public void itemStateChanged(ItemEvent ev) {
-				String sem = ev.getItem().toString();
-				semester = Integer.parseInt(sem);				
+				semester = ev.getItem().toString();
 			}
 		});
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println(grade + " " + semester);
+				TimetableClient.client.getInfo(grade, semester);
 				infoWindow.dispose();
-				TimetableClient.client.signIn(id, pw);
+				
 			}
 		});
 

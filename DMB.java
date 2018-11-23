@@ -1,13 +1,10 @@
 package Network_DMB;
 import java.awt.*;
 import java.io.*;
-import java.net.Socket;
-import java.util.ArrayList;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 public class DMB {
-	JFrame initWindow = new JFrame("8 times in life");
+	JFrame initWindow = new JFrame("8 TIMES IN LIFE");
 	JFrame signUP = new JFrame("회원가입 정보 입력");
 	String id;
 	String pw;
@@ -68,7 +65,7 @@ public class DMB {
 		signUp.setBackground(new Color(222,110,70));
 		signUp.setForeground(Color.white);
 						
-		signUP.setBounds(100, 100, 275, 330);
+		signUP.setBounds(125, 130, 275, 330);
 		signUP.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
 		JPanel contentPane = new JPanel();
@@ -158,7 +155,6 @@ public class DMB {
 		signUp.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				signUP.setVisible(true);
-				initWindow.setVisible(false);
 			}
 		});
 	}	
