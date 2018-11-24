@@ -1,4 +1,4 @@
-package Project;
+package Network_DMB; 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,8 +10,10 @@ import java.util.HashSet;
 
 public class ChatServer 
 {
-    private static final int PORT = 2015;//포트넘버설정  
+    private static final int PORT = 9000;//포트넘버설정  
 
+    public static String s = "";
+    
     private static HashSet<String> names = new HashSet<String>();//클라이언트에서 입력하는 이름들을 해시셋에저장하여관리한다  
 
     public static ArrayList<String> list = new ArrayList<String>();
@@ -66,15 +68,22 @@ public class ChatServer
                     {
                         if (!names.contains(name)) //입력된값이있을시 방에 들어갔다는 내용을보여줌  
                         {
-                            names.add(name);
-                            list.add(name);
-                            out.println("LIST " + "+ " + name);
-                    		writers.add(out);
-                            out.println("NAMEACCEPTED");
-                            writers.add(out);
-                            for (PrintWriter writer : writers) 
-                            		writer.println("MESSAGE " + name + " JOIN ROOM !");  
-                            break;
+                            	names.add(name);
+                            	list.add(name);
+                            	s = "";
+
+                    			out.println("NAMEACCEPTED");
+                    			writers.add(out);
+                    			
+                    			for(int x=0; x<list.size(); x++)
+                            		s = s + list.get(x) + ",";
+                            	
+                            	for (PrintWriter writer : writers) 
+                    				writer.println("LIST " + "+ " + s);  
+                            	
+                    			for (PrintWriter writer : writers) 
+                    				writer.println("MESSAGE " + name + " JOIN ROOM !");  
+                    			break;
                         }
                     }
                 }
@@ -109,8 +118,7 @@ public class ChatServer
             		for (PrintWriter writer : writers) // 사용자가 나가서 스레드가 끝났음을 모든 클라이언트에게 제공 
                 {
             			list.remove(name);
-            			out.println("LIST " + "- " + name);
-            			writers.add(out);
+            			writer.println("LIST " + "- " + name);
             			writer.println("MESSAGE " + name + " EXIT ROOM...");
                 }
                 if (name != null)
@@ -132,3 +140,4 @@ public class ChatServer
         }
     }
 }
+

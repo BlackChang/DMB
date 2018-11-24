@@ -1,4 +1,4 @@
-package Project;
+package Network_DMB;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -20,8 +20,8 @@ public class ChatClient
     DefaultListModel<String> model = new DefaultListModel<String>();
     JList list;
     
-    ArrayList<String> chatList = new ArrayList<String>();
-    int count = 0;
+    static ArrayList<String> chatList = new ArrayList<String>();
+
     public static String w="";//위스퍼가유효한지확인 위스퍼를 받을 사용자이름을 임시저장  
     private String origin; //각클라이언트를 구분할 고유한 사용자이름이다
   //Pop up Chat
@@ -45,7 +45,6 @@ public class ChatClient
     	        			fr.getContentPane().add(list, "East");
     	    				fr.getContentPane().add(tf, "North");
     	    		        fr.getContentPane().add(new JScrollPane(text), "Center");
-    	    		        tf.setText("Enjoy your chatting");
     	    		        
     	    		        tf.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
     	    		                {
@@ -79,7 +78,7 @@ public class ChatClient
     private void run() throws IOException //스레드가 실행되는부분 
     {
         String serverAddress = getServerAddress();
-        Socket socket = new Socket(serverAddress, 2015);
+        Socket socket = new Socket(serverAddress, 9000);
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         out = new PrintWriter(socket.getOutputStream(), true);
         while (true) 
@@ -129,16 +128,24 @@ public class ChatClient
     		if (line.startsWith("+"))
     		{
     			line = line.substring(2);
-    			chatList.add(line);
-    			count++;
-    			model.addElement(chatList.get(count-1));
+    			chatList.clear();
+    			model.clear();
+    			String[] s = line.split(",");
+    			for(int x=0; x < s.length;x++)
+    			{
+    				chatList.add(s[x]);
+    				model.addElement(chatList.get(x));
+    			}
     		}
     		else if(line.startsWith("-"))
     		{
     			line = line.substring(2);
-    			model.removeElementAt(chatList.indexOf(line));
+    			model.clear();
     			chatList.remove(line);
-    			count--;
+    			for(int x=0; x < chatList.size();x++)
+    			{
+    				model.addElement(chatList.get(x));
+    			}
     		}
     }
 
