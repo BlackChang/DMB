@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.event.*;
 public class DMB {
 	JFrame initWindow = new JFrame("8 TIMES IN LIFE");
-	JFrame signUP = new JFrame("È¸¿ø°¡ÀÔ Á¤º¸ ÀÔ·Â");
+	JFrame signUP = new JFrame("íšŒì›ê°€ì…");
 	String id;
 	String pw;
 	String name;
@@ -28,10 +28,10 @@ public class DMB {
 		iPanel.add(icon);
 		
 		
-		JLabel lblId = new JLabel("¾ÆÀÌµğ");
+		JLabel lblId = new JLabel("ì•„ì´ë””");
 		lblId.setBounds(50, 260, 50, 30);
 		iPanel.add(lblId);
-		lblId.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 15));
+		lblId.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 15));
 		lblId.setForeground(new Color(222,110,70));
 		
 		IDtextField = new JTextField();
@@ -39,28 +39,28 @@ public class DMB {
 		iPanel.add(IDtextField);
 		IDtextField.setColumns(10);
 		
-		JLabel lblPassword = new JLabel("ºñ¹Ğ¹øÈ£");
+		JLabel lblPassword = new JLabel("ë¹„ë°€ë²ˆí˜¸");
 		lblPassword.setBounds(50, 330, 100, 30);
 		iPanel.add(lblPassword);
-		lblPassword.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 15));
+		lblPassword.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 15));
 		lblPassword.setForeground(new Color(222,110,70));
 		
 		passwordField = new JPasswordField();
 		passwordField.setBounds(50, 360, 200, 30);
 		iPanel.add(passwordField);
 		
-		JButton signIn = new JButton("·Î±×ÀÎ");
+		JButton signIn = new JButton("ë¡œê·¸ì¸");
 		signIn.setBounds(50, 395, 95, 30);
 		iPanel.add(signIn);
-		signIn.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö",Font.PLAIN, 15));
+		signIn.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„",Font.PLAIN, 15));
 		signIn.setBorderPainted(false);
 		signIn.setBackground(new Color(222,110,70));
 		signIn.setForeground(Color.white);
 		
-		JButton signUp = new JButton("È¸¿ø°¡ÀÔ");
+		JButton signUp = new JButton("íšŒì›ê°€ì…");
 		signUp.setBounds(155, 395, 95, 30);
 		iPanel.add(signUp);
-		signUp.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö",Font.PLAIN, 15));
+		signUp.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„",Font.PLAIN, 15));
 		signUp.setBorderPainted(false);
 		signUp.setBackground(new Color(222,110,70));
 		signUp.setForeground(Color.white);
@@ -75,41 +75,41 @@ public class DMB {
 
 		signUP.setContentPane(contentPane);
 		
-		JLabel idLabel = new JLabel("¾ÆÀÌµğ");
+		JLabel idLabel = new JLabel("ì•„ì´ë””");
 		idLabel.setBounds(30, 30, 100, 30);
-		idLabel.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 15));
+		idLabel.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 15));
 		idLabel.setForeground(new Color(222,110,70));
 		contentPane.add(idLabel);
 
 		JTextField IDField = new JTextField();
 		IDField.setBounds(30, 60, 200, 30);
-		contentPane.add(IDField); //¾ÆÀÌµğ
+		contentPane.add(IDField); //ï¿½ï¿½ï¿½Ìµï¿½
 		IDField.setColumns(9);
 
-		JLabel pwLabel = new JLabel("ºñ¹Ğ¹øÈ£");
+		JLabel pwLabel = new JLabel("ë¹„ë°€ë²ˆí˜¸");
 		pwLabel.setBounds(30, 90, 100, 30);
-		pwLabel.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 15));
+		pwLabel.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 15));
 		pwLabel.setForeground(new Color(222,110,70));
 		contentPane.add(pwLabel);
 		
 		JPasswordField pwField = new JPasswordField();
 		pwField.setBounds(30, 120, 200, 30);
-		contentPane.add(pwField); //ºñ¹ø
+		contentPane.add(pwField); //ï¿½ï¿½ï¿½
 		
-		JLabel nameLabel = new JLabel("ÀÌ¸§");
+		JLabel nameLabel = new JLabel("ì´ë¦„");
 		nameLabel.setBounds(30, 150, 100, 30);
-		nameLabel.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 15));
+		nameLabel.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 15));
 		nameLabel.setForeground(new Color(222,110,70));
 		contentPane.add(nameLabel);		
 		
 		JTextField nameField = new JTextField();
 		nameField.setBounds(30, 180, 200, 30);
-		contentPane.add(nameField); //ÀÌ¸§
+		contentPane.add(nameField); //ï¿½Ì¸ï¿½
 		nameField.setColumns(30);
 
-		JButton signUpButton = new JButton("°¡ÀÔÇÏ±â");
+		JButton signUpButton = new JButton("í™•ì¸");
 		signUpButton.setBounds(30, 220, 200, 30);
-		signUpButton.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö",Font.PLAIN, 15));
+		signUpButton.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„",Font.PLAIN, 15));
 		signUpButton.setBorderPainted(false);
 		signUpButton.setBackground(new Color(222,110,70));
 		signUpButton.setForeground(Color.white);
@@ -124,15 +124,15 @@ public class DMB {
 				name = nameField.getText();
 				
 				if(id.length()!=9) {
-				   	JOptionPane.showMessageDialog(null, "ID¸¦ ÇĞ¹ø ¾ç½ÄÀ¸·Î ÀÔ·ÂÇØÁÖ¼¼¿ä.", "TOO SHORT ID",
+				   	JOptionPane.showMessageDialog(null, "IDë¥¼ í•™ë²ˆ ì–‘ì‹ìœ¼ë¡œ ì…ë ¥í•´ì£¼ì„¸ìš”.", "TOO SHORT ID",
     						JOptionPane.WARNING_MESSAGE);	
 				}
 				else if(pw.length() < 5) {
-				   	JOptionPane.showMessageDialog(null, "PW¸¦ 5ÀÚ¸® ÀÌ»ó ÀÔ·ÂÇØÁÖ¼¼¿ä.", "TOO SHORT PW",
+				   	JOptionPane.showMessageDialog(null, "PWë¥¼ 5ì ì´ìƒ ì…ë ¥í•´ì£¼ì„¸ìš”.", "TOO SHORT PW",
     						JOptionPane.WARNING_MESSAGE);	
 				}
 				else if(name.length() == 0) {
-				   	JOptionPane.showMessageDialog(null, "ÀÌ¸§À» ÀÔ·ÂÇØÁÖ¼¼¿ä.", "TOO SHORT NAME",
+				   	JOptionPane.showMessageDialog(null, "ì´ë¦„ì„ ì˜¬ë°”ë¥´ê²Œ ì…ë ¥í•´ì£¼ì„¸ìš”.", "TOO SHORT NAME",
     						JOptionPane.WARNING_MESSAGE);	
 				}
 				else

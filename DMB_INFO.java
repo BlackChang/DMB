@@ -16,16 +16,16 @@ public class DMB_INFO {
 		iPanel.setLayout(null);
 		iPanel.setBackground(Color.white);			
 	
-		JLabel lblInfo = new JLabel("ºÒ·¯¿Ã ½Ã°£Ç¥ÀÇ ÇĞ³â°ú ÇĞ±â¸¦ ¼±ÅÃÇÏ¼¼¿ä");
+		JLabel lblInfo = new JLabel("ë¶ˆëŸ¬ì˜¬ ì‹œê°„í‘œì˜ í•™ë…„ê³¼ í•™ê¸°ë¥¼ ì„ íƒí•´ì£¼ì„¸ìš”");
 		lblInfo.setBounds(50, 50, 500, 30);
 		iPanel.add(lblInfo);
-		lblInfo.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 20));
+		lblInfo.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 20));
 		lblInfo.setForeground(new Color(222,110,70));
 
-		JLabel lblGrade = new JLabel("ÇĞ    ³â");
+		JLabel lblGrade = new JLabel("í•™    ë…„");
 		lblGrade.setBounds(50, 100, 100, 30);
 		iPanel.add(lblGrade);
-		lblGrade.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 20));
+		lblGrade.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 20));
 		lblGrade.setForeground(new Color(222,110,70));
 
 		String[] grd = { "1", "2", "3", "4" };
@@ -33,26 +33,26 @@ public class DMB_INFO {
 		gradeBox.setBackground(Color.white);
 		
 		gradeBox.setBounds(130, 100, 93, 30);
-		gradeBox.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 15));
+		gradeBox.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 15));
 		iPanel.add(gradeBox);
 		
-		JLabel lblSem = new JLabel("ÇĞ    ±â");
+		JLabel lblSem = new JLabel("í•™    ê¸°");
 		lblSem.setBounds(240, 100, 100, 30);
 		iPanel.add(lblSem);
-		lblSem.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 20));
+		lblSem.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 20));
 		lblSem.setForeground(new Color(222,110,70));
 		
 		String[] sem = { "1", "2" };
 		JComboBox<String> semBox = new JComboBox<String>(sem);
 		semBox.setBackground(Color.white);
 		semBox.setBounds(320, 100, 93, 30);
-		semBox.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö", Font.PLAIN, 15));
+		semBox.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„", Font.PLAIN, 15));
 		iPanel.add(semBox);
 		
-		JButton check = new JButton("È®ÀÎ");
+		JButton check = new JButton("í™•ì¸");
 		check.setBounds(340, 150, 80, 30);
 		iPanel.add(check);
-		check.setFont(new Font("¹è´ŞÀÇ¹ÎÁ· µµÇö",Font.PLAIN, 15));
+		check.setFont(new Font("ë°°ë‹¬ì˜ë¯¼ì¡± ë„í˜„",Font.PLAIN, 15));
 		check.setBorderPainted(false);
 		check.setBackground(new Color(222,110,70));
 		check.setForeground(Color.white);
@@ -75,7 +75,6 @@ public class DMB_INFO {
 				System.out.println(grade + " " + semester);
 				TimetableClient.client.getInfo(grade, semester);
 				infoWindow.dispose();
-				
 			}
 		});
 
