@@ -6,9 +6,9 @@ import java.net.*;
 import com.mysql.jdbc.Connection;
 public class TimetableServer {
     private static final int PORT = 9001;
-
+    public static String[] instructor = new String[10];
     static ArrayList<String> names = new ArrayList<String>();
-    //Å¬¶óÀÌ¾ğÆ®µéÀÇ ÀÌ¸§À» ÀúÀåÇØ³õÀº ArrayList
+    //Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ø³ï¿½ï¿½ï¿½ ArrayList
   
 	public static void main(String[] args) throws Exception{
 		System.out.println("Server start..\n");
@@ -30,9 +30,9 @@ public class TimetableServer {
     	private String restTime;
         private Socket socket;
         private BufferedReader in;
-        //Å¬¶óÀÌ¾ğÆ®·ÎºÎÅÍ µ¥ÀÌÅÍ ¹Ş±â À§ÇÑ º¯¼ö
+        //Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ®ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ş±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         private PrintWriter out;
-        //Å¬¶óÀÌ¾ğ¿¡°Ô µ¥ÀÌÅÍ ³»º¸³»±â À§ÇÑ º¯¼ö        
+        //Å¬ï¿½ï¿½ï¿½Ì¾ğ¿¡°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½        
         
         public Handler(Socket socket) {
             this.socket = socket;
@@ -41,7 +41,7 @@ public class TimetableServer {
         	Connection con = null;
     		try {
     			Class.forName("com.mysql.jdbc.Driver");
-    			String url = "jdbc:mysql://localhost/timedb";
+    			String url = "jdbc:mysql://localhost/timedb?useUnicode=true&characterEncoding=UTF-8";
     			String user = "root"; 
     			String pw = "12345";
     			con = (Connection) DriverManager.getConnection(url, user, pw);
@@ -57,13 +57,13 @@ public class TimetableServer {
             	
             	while (true) {
                     String line = in.readLine();
-                    //¼­¹ö·ÎºÎÅÍ µ¥ÀÌÅÍ ÀĞ¾î¿Í line º¯¼ö¿¡ ÀúÀå
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ğ¾ï¿½ï¿½ line ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             	    if (line.startsWith("SIGNUP")) {
                         id = in.readLine(); 
                         pw = in.readLine();
                         name = in.readLine();
                         signUp(id, pw, name, con);
-                        //¼­¹ö·ÎºÎÅÍ ÀĞ¾î¿Â µ¥ÀÌÅÍ°¡ SUBMITNAMEÀÏ ¶§ getNameÇÔ¼ö ÀÌ¿ë¿¡ »ç¿ëÀÚ ÀÌ¸§ ÀÔ·Â ¹ŞÀ½
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ ï¿½Ğ¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ SUBMITNAMEï¿½ï¿½ ï¿½ï¿½ getNameï¿½Ô¼ï¿½ ï¿½Ì¿ë¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ ï¿½Ô·ï¿½ ï¿½ï¿½ï¿½ï¿½
                     }
                     else if(line.startsWith("SIGNIN")) {
                     	id = in.readLine();
@@ -73,13 +73,13 @@ public class TimetableServer {
                     else if(line.startsWith("INFO")) {
                     	grade = in.readLine();
                     	semester = in.readLine();
+                    	getProf(con);
                         info(this.id, grade, semester, con);
                     }
                     else if(line.startsWith("OPTION")) {
                     	prof = in.readLine();
                     	restTime = in.readLine();
-                    }                
-            	    
+                    }         
                 }                    
     	    } catch (IOException e) {
     	    	System.out.println(e);
@@ -88,7 +88,7 @@ public class TimetableServer {
     	    }
     		
     	    try {
-    	    	socket.close(); //¼ÒÄÏ Á¾·á
+    	    	socket.close(); //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     	    } catch (IOException e) {
     	    	e.printStackTrace();
     	    }
@@ -104,9 +104,9 @@ public class TimetableServer {
                rs = ps.executeQuery();
                if(rs.next()) {
             	   out.println("Duplicate ID");
-            	   //°æ°í¹® : ÀÌ¹Ì °¡ÀÔµÇ¾î ÀÖ½À´Ï´Ù.
+            	   //ï¿½ï¿½ï¿½ : ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ÔµÇ¾ï¿½ ï¿½Ö½ï¿½ï¿½Ï´ï¿½.
                }   
-               else { //»õ·Î¿î ¾ÆÀÌµğ¿Í ºñ¹Ğ¹øÈ£ DB¿¡ ÀúÀå
+               else { //ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ï¿½ ï¿½ï¿½Ğ¹ï¿½È£ DBï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             	   String signUP = null;
                    signUP = "insert into id_pw values(?,?,?)";
             	   ps = con.prepareStatement(signUP);
@@ -163,6 +163,38 @@ public class TimetableServer {
             		out.println("EXISTTABLE"); 
             	else
             		out.println("NEWTABLE");
+            	/*else {
+            		sql = "insert into created_table values(?,?,?)";
+            		ps = con.prepareStatement(sql);
+            		ps.setString(1, ID); 
+            		ps.setInt(2, Integer.parseInt(Grade));
+            		ps.setInt(3, Integer.parseInt(Semester));
+            		ps.executeUpdate();            		   
+            		out.println("NEWTABLE");
+               } */              
+            } catch(SQLException e) {
+            	e.printStackTrace();
+            }
+        }
+        public void getProf(Connection con) {
+        	PreparedStatement ps = null;
+        	ResultSet rs = null;
+            try {
+            	String sql = null;
+            	sql = "select distinct instructor from course where grade ='" + Integer.parseInt(grade) + 
+            			"' and semester = '" +  Integer.parseInt(semester) + "' and major='ì „í•„'";
+            	ps = con.prepareStatement(sql);
+            	rs = ps.executeQuery();
+            	
+            	instructor[0] = "ìƒê´€ì—†ìŒ";
+            	while(rs.next()) {
+            		int i = 1;
+            		instructor[i] = rs.getString(1);
+            		System.out.println(instructor[i]);
+            		i++;
+            	}
+            	//else
+            		//out.println("NEWTABLE");
             	/*else {
             		sql = "insert into created_table values(?,?,?)";
             		ps = con.prepareStatement(sql);

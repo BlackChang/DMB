@@ -28,16 +28,16 @@ public class TimetableClient {
             "Welcome to the Chatter",
             JOptionPane.QUESTION_MESSAGE);
     }
-    //¼­¹ö IPÁÖ¼Ò ¹Ş±â À§ÇÑ frame »ı¼º     
+    //ï¿½ï¿½ï¿½ï¿½ IPï¿½Ö¼ï¿½ ï¿½Ş±ï¿½ ï¿½ï¿½ï¿½ï¿½ frame ï¿½ï¿½ï¿½ï¿½     
     private void run() throws IOException {
         String serverAddress = getServerAddress();
         Socket socket = new Socket(serverAddress, 9001);
         
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        //¼­¹ö·ÎºÎÅÍ ÀĞ¾î¿À´Â input stream
+        //ï¿½ï¿½ï¿½ï¿½ï¿½Îºï¿½ï¿½ï¿½ ï¿½Ğ¾ï¿½ï¿½ï¿½ï¿½ input stream
         
         out = new PrintWriter(socket.getOutputStream(), true);
-        //¼­¹ö·Î µ¥ÀÌÅÍ º¸³»´Â output stream
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ output stream
 
         DMB cli = new DMB();
         cli.initWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -48,16 +48,17 @@ public class TimetableClient {
        	
        	DMB_OPTION option = new DMB_OPTION();
        	option.optionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+       //	option.optionWindow.setVisible(true);
         while(true) {
             status = in.readLine();
         	System.out.println(status);
             if(status.startsWith("Duplicate ID")) {
-				JOptionPane.showMessageDialog(null, "ÀÌ¹Ì ÀÖ´Â IDÀÔ´Ï´Ù.", "ID Duplication",
+				JOptionPane.showMessageDialog(null, "ì´ë¯¸ ìˆëŠ” IDì…ë‹ˆë‹¤.", "ID Duplication",
 						JOptionPane.WARNING_MESSAGE);
 
             }
             else if(status.startsWith("COMPLETE")) {
-            	JOptionPane.showMessageDialog(null, "ID°¡ »ı¼ºµÇ¾ú½À´Ï´Ù", "COMPLETE",
+            	JOptionPane.showMessageDialog(null, "IDê°€ ìƒì„±ë˜ì—ˆìŠµë‹ˆë‹¤", "COMPLETE",
 						JOptionPane.INFORMATION_MESSAGE);	
             	cli.signUP.dispose();
             	cli.initWindow.setVisible(true);
@@ -67,15 +68,15 @@ public class TimetableClient {
                	info.infoWindow.setVisible(true);
             }
             else if(status.startsWith("NOTEXIST")) {
-               	JOptionPane.showMessageDialog(null, "ID°¡ Á¸ÀçÇÏÁö ¾Ê½À´Ï´Ù.", "ID NOT EXISTS",
+               	JOptionPane.showMessageDialog(null, "IDê°€ ì¡´ì¬í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.", "ID NOT EXISTS",
         						JOptionPane.WARNING_MESSAGE);	
             }
             else if(status.startsWith("WRONGPW")) {
-               	JOptionPane.showMessageDialog(null, "ºñ¹Ğ¹øÈ£°¡ ¸ÂÁö ¾Ê½À´Ï´Ù.", "WRONG PASSWORD",
+               	JOptionPane.showMessageDialog(null, "ë¹„ë°€ë²ˆí˜¸ê°€ ì¼ì¹˜í•˜ì§€ ì•ŠìŠµë‹ˆë‹¤.", "WRONG PASSWORD",
         						JOptionPane.WARNING_MESSAGE);	
             }
             else if(status.startsWith("EXISTTABLE")) {
-            	JOptionPane.showMessageDialog(null, "¿©±â ÀÖ´Ù Å×ÀÌºí", "TIMETABLE",
+            	JOptionPane.showMessageDialog(null, "ë­ì˜€ì§€", "TIMETABLE",
 						JOptionPane.INFORMATION_MESSAGE);
             }
             else if(status.startsWith("NEWTABLE")) {
@@ -85,12 +86,12 @@ public class TimetableClient {
         }
      
         /*
-        if(È¸¿ø°¡ÀÔ actionListener){
+        if(È¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ actionListener){
         	out.println("SIGNUP");
         	out.println(ID);
         	out.println(PW);
         }
-        if(·Î±×ÀÎ actionListener){
+        if(ï¿½Î±ï¿½ï¿½ï¿½ actionListener){
         	out.println("SIGNIN");
         	out.println(ID);z
         	out.println(PW);
@@ -100,10 +101,10 @@ public class TimetableClient {
         	out.println(grade);
         	out.println(semester);
         }
-        if(¿É¼Ç actionListener){
+        if(ï¿½É¼ï¿½ actionListener){
         	out.println("OPTION");
         	out.println(professor);
-        	out.println(°ø°­);
+        	out.println(ï¿½ï¿½ï¿½ï¿½);
         }
         */	
     }
@@ -129,7 +130,10 @@ public class TimetableClient {
     	out.println(professor);
     	out.println(day);
     }
-    //»ç¿ëÀÚ Á¤º¸(ÇĞ¹ø, ÀÌ¸§, ÇĞ³â, ÇĞ±â) ÀÔ·Â ¹Ş±â À§ÇÑ frame »ı¼º    
+    public void prof_list(String professor) {
+    	out.println("GETPROF");
+    }
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½(ï¿½Ğ¹ï¿½, ï¿½Ì¸ï¿½, ï¿½Ğ³ï¿½, ï¿½Ğ±ï¿½) ï¿½Ô·ï¿½ ï¿½Ş±ï¿½ ï¿½ï¿½ï¿½ï¿½ frame ï¿½ï¿½ï¿½ï¿½    
 
     public static void main(String[] args) throws Exception {
     	client  = new TimetableClient();
