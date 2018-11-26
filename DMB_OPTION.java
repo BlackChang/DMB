@@ -64,8 +64,8 @@ public class DMB_OPTION {
 		lblOption.setFont(new Font("배달의민족 도현", Font.PLAIN, 20));
 		lblOption.setForeground(new Color(222,110,70));
 
-		String[] prof_list = new String[3];
-		JComboBox<String> profBox = new JComboBox<String>(TimetableServer.instructor);
+		
+		JComboBox<String> profBox = new JComboBox<String>(TimetableClient.prof_list);
 		profBox.setBackground(Color.white);
 		profBox.setBounds(30, 70, 120, 30);
 		profBox.setFont(new Font("배달의민족 도현", Font.PLAIN, 20));
@@ -101,7 +101,7 @@ public class DMB_OPTION {
 		check.setBackground(new Color(222,110,70));
 		check.setForeground(Color.white);
 
-		//prof = profBox.getSelectedItem().toString();
+		prof = profBox.getSelectedItem().toString();
 		restTime = dayBox.getSelectedItem().toString();
 
 		profBox.addItemListener(new ItemListener(){
@@ -120,6 +120,5 @@ public class DMB_OPTION {
 				preference.dispose();				
 			}
 		});
-
 	}
 }
