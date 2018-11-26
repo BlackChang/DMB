@@ -3,6 +3,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.io.*;
 import java.net.*;
+import java.nio.charset.Charset;
+
 import com.mysql.jdbc.Connection;
 public class TimetableServer {
     private static final int PORT = 9001;
@@ -32,6 +34,7 @@ public class TimetableServer {
         private BufferedReader in;
         //Ŭ���̾�Ʈ�κ��� ������ �ޱ� ���� ����
         private PrintWriter out;
+        private PrintWriter list;
         //Ŭ���̾𿡰� ������ �������� ���� ����        
         
         public Handler(Socket socket) {
@@ -41,7 +44,7 @@ public class TimetableServer {
         	Connection con = null;
     		try {
     			Class.forName("com.mysql.jdbc.Driver");
-    			String url = "jdbc:mysql://localhost/timedb?useUnicode=true&characterEncoding=UTF-8";
+    			String url = "jdbc:mysql://localhost:3306/timedb?useUnicode=true&characterEncoding=utf8";
     			String user = "root"; 
     			String pw = "12345";
     			con = (Connection) DriverManager.getConnection(url, user, pw);
@@ -53,8 +56,8 @@ public class TimetableServer {
     		} 
     		try {
     			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            	out = new PrintWriter(socket.getOutputStream(), true);
-            	
+            	out = new PrintWriter(socket.getOutputStream(),true);
+            	list = new PrintWriter(socket.getOutputStream(),true);
             	while (true) {
                     String line = in.readLine();
                     //�����κ��� ������ �о�� line ������ ����
@@ -109,11 +112,15 @@ public class TimetableServer {
                else { //���ο� ���̵�� ��й�ȣ DB�� ����
             	   String signUP = null;
                    signUP = "insert into id_pw values(?,?,?)";
-            	   ps = con.prepareStatement(signUP);
+                   ps = con.prepareStatement(signUP);
                    ps.setString(1, ID);
                    ps.setString(2, PW);
                    ps.setString(3, NAME);
              	   ps.executeUpdate();
+             	   System.out.println(ps);
+               	   System.out.println(ID);
+             	   System.out.println(PW);
+             	   System.out.println(NAME);
              	   out.println("COMPLETE");
                }
             } catch (SQLException e) {
@@ -181,18 +188,42 @@ public class TimetableServer {
         	ResultSet rs = null;
             try {
             	String sql = null;
-            	sql = "select distinct instructor from course where grade ='" + Integer.parseInt(grade) + 
-            			"' and semester = '" +  Integer.parseInt(semester) + "' and major='전필'";
+            	sql = "select count(distinct instructor) from course where grade =" + Integer.parseInt(grade) + 
+            			" and semester = " +  Integer.parseInt(semester) + " and major='전필'";
             	ps = con.prepareStatement(sql);
+            	System.out.println(ps);
+            	rs = ps.executeQuery();
+            	int num = 0;
+            	if(rs.next())
+            		num = rs.getInt(1);
+            	System.out.println(num);
+            	sql = "select distinct instructor from course where grade =" + Integer.parseInt(grade) + 
+            			" and semester = " +  Integer.parseInt(semester) + " and major='전필'";
+            	ps = con.prepareStatement(sql);
+            	System.out.println(ps);
             	rs = ps.executeQuery();
             	
             	instructor[0] = "상관없음";
+            	out.println("PROFLIST");
+            	String send = Integer.toString(num);
+            	out.println(send);
+            	
+            	int i = 1;
+            	
             	while(rs.next()) {
-            		int i = 1;
             		instructor[i] = rs.getString(1);
-            		System.out.println(instructor[i]);
             		i++;
             	}
+            	i = 0;
+            	while(i < num + 1) {
+            		out.println(instructor[i]);
+                	i++;
+            	}
+            	i = 0;
+            	//while(i < instructor.length) {
+            		//list.println(instructor[i]);
+            		//i++;
+            	//}
             	//else
             		//out.println("NEWTABLE");
             	/*else {

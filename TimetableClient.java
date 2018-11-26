@@ -11,7 +11,9 @@ import javax.swing.*;
 
 public class TimetableClient {
     static TimetableClient client;
+    static String[] prof_list;
     BufferedReader in;
+    BufferedReader list;
     PrintWriter out;
     JFrame frame = new JFrame("8 Time in life");    
     private String id;
@@ -38,7 +40,7 @@ public class TimetableClient {
         
         out = new PrintWriter(socket.getOutputStream(), true);
         //������ ������ ������ output stream
-
+        list = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         DMB cli = new DMB();
         cli.initWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         cli.initWindow.setVisible(true);
@@ -46,9 +48,7 @@ public class TimetableClient {
         DMB_INFO info = new DMB_INFO();
        	info.infoWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
        	
-       	DMB_OPTION option = new DMB_OPTION();
-       	option.optionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-       //	option.optionWindow.setVisible(true);
+       	//	option.optionWindow.setVisible(true);
         while(true) {
             status = in.readLine();
         	System.out.println(status);
@@ -80,9 +80,22 @@ public class TimetableClient {
 						JOptionPane.INFORMATION_MESSAGE);
             }
             else if(status.startsWith("NEWTABLE")) {
-            	option.optionWindow.setVisible(true);
+            	DMB_OPTION option = new DMB_OPTION();
+               	option.optionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                option.optionWindow.setVisible(true);
             }
-   
+            else if(status.startsWith("PROFLIST")) {
+                int i = 0;
+                int num = 0;
+                String receive = in.readLine();                
+                num = Integer.parseInt(receive);
+                
+                prof_list = new String[num + 1];
+                while(i < num + 1) {
+                	prof_list[i] = in.readLine();
+                	i++;
+                }                    	
+            }
         }
      
         /*
