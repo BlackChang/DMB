@@ -6,9 +6,9 @@ import java.net.*;
 import com.mysql.jdbc.Connection;
 public class TimetableServer {
     private static final int PORT = 9001;
-
-    private static ArrayList<String> names = new ArrayList<String>();
-    //≈¨∂Û¿Ãæ∆ÆµÈ¿« ¿Ã∏ß¿ª ¿˙¿Â«ÿ≥ı¿∫ ArrayList
+    public static String[] instructor = new String[10];
+    static ArrayList<String> names = new ArrayList<String>();
+    //≈¨ÔøΩÔøΩÔøΩÃæÔøΩ∆ÆÔøΩÔøΩÔøΩÔøΩ ÔøΩÃ∏ÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÿ≥ÔøΩÔøΩÔøΩ ArrayList
   
 	public static void main(String[] args) throws Exception{
 		System.out.println("Server start..\n");
@@ -24,15 +24,15 @@ public class TimetableServer {
     	private String id;
     	private String name;
     	private String pw;
-    	private int grade;
-    	private int semester;
-    	private String professor;
-    	private String spaceTime;
+    	private String grade;
+    	private String semester;
+    	private String prof;
+    	private String restTime;
         private Socket socket;
         private BufferedReader in;
-        //≈¨∂Û¿Ãæ∆Æ∑Œ∫Œ≈Õ µ•¿Ã≈Õ πﬁ±‚ ¿ß«— ∫Øºˆ
+        //≈¨ÔøΩÔøΩÔøΩÃæÔøΩ∆ÆÔøΩŒ∫ÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩﬁ±ÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
         private PrintWriter out;
-        //≈¨∂Û¿Ãæø°∞‘ µ•¿Ã≈Õ ≥ª∫∏≥ª±‚ ¿ß«— ∫Øºˆ        
+        //≈¨ÔøΩÔøΩÔøΩÃæø°∞ÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ        
         
         public Handler(Socket socket) {
             this.socket = socket;
@@ -41,7 +41,7 @@ public class TimetableServer {
         	Connection con = null;
     		try {
     			Class.forName("com.mysql.jdbc.Driver");
-    			String url = "jdbc:mysql://localhost/timedb?useUnicode=true&characterEncoding=UTF8";
+    			String url = "jdbc:mysql://localhost/timedb?useUnicode=true&characterEncoding=UTF-8";
     			String user = "root"; 
     			String pw = "12345";
     			con = (Connection) DriverManager.getConnection(url, user, pw);
@@ -57,33 +57,29 @@ public class TimetableServer {
             	
             	while (true) {
                     String line = in.readLine();
-                    //º≠πˆ∑Œ∫Œ≈Õ µ•¿Ã≈Õ ¿–æÓøÕ line ∫Øºˆø° ¿˙¿Â
+                    //ÔøΩÔøΩÔøΩÔøΩÔøΩŒ∫ÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩ–æÔøΩÔøΩ line ÔøΩÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
             	    if (line.startsWith("SIGNUP")) {
                         id = in.readLine(); 
                         pw = in.readLine();
                         name = in.readLine();
                         signUp(id, pw, name, con);
-                        //º≠πˆ∑Œ∫Œ≈Õ ¿–æÓø¬ µ•¿Ã≈Õ∞° SUBMITNAME¿œ ∂ß getName«‘ºˆ ¿ÃøÎø° ªÁøÎ¿⁄ ¿Ã∏ß ¿‘∑¬ πﬁ¿Ω
+                        //ÔøΩÔøΩÔøΩÔøΩÔøΩŒ∫ÔøΩÔøΩÔøΩ ÔøΩ–æÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩÔøΩÕ∞ÔøΩ SUBMITNAMEÔøΩÔøΩ ÔøΩÔøΩ getNameÔøΩ‘ºÔøΩ ÔøΩÃøÎø° ÔøΩÔøΩÔøΩÔøΩÔøΩ ÔøΩÃ∏ÔøΩ ÔøΩ‘∑ÔøΩ ÔøΩÔøΩÔøΩÔøΩ
                     }
                     else if(line.startsWith("SIGNIN")) {
                     	id = in.readLine();
                     	pw = in.readLine();
-                        signIn(id, pw, con);
-                        
+                        signIn(id, pw, con);         
                     }
                     else if(line.startsWith("INFO")) {
-                    	name = in.readLine();
-                    	grade = in.read();
-                    	semester = in.read();
-                        if (name == null || grade == 0 || semester == 0)
-                            return;
-                            //«–π¯¿Ã null¿Ã∏È return
-                        info(id, name, grade, semester, con);
+                    	grade = in.readLine();
+                    	semester = in.readLine();
+                    	getProf(con);
+                        info(this.id, grade, semester, con);
                     }
                     else if(line.startsWith("OPTION")) {
-                    	professor = in.readLine();
-                    	spaceTime = in.readLine();
-                    }                
+                    	prof = in.readLine();
+                    	restTime = in.readLine();
+                    }         
                 }                    
     	    } catch (IOException e) {
     	    	System.out.println(e);
@@ -92,7 +88,7 @@ public class TimetableServer {
     	    }
     		
     	    try {
-    	    	socket.close(); //º“ƒœ ¡æ∑·
+    	    	socket.close(); //ÔøΩÔøΩÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
     	    } catch (IOException e) {
     	    	e.printStackTrace();
     	    }
@@ -108,9 +104,9 @@ public class TimetableServer {
                rs = ps.executeQuery();
                if(rs.next()) {
             	   out.println("Duplicate ID");
-            	   //∞Ê∞ÌπÆ : ¿ÃπÃ ∞°¿‘µ«æÓ ¿÷Ω¿¥œ¥Ÿ.
+            	   //ÔøΩÔøΩÔøΩ : ÔøΩÃπÔøΩ ÔøΩÔøΩÔøΩ‘µ«æÔøΩ ÔøΩ÷ΩÔøΩÔøΩœ¥ÔøΩ.
                }   
-               else { //ªı∑ŒøÓ æ∆¿ÃµøÕ ∫Òπ–π¯»£ DBø° ¿˙¿Â
+               else { //ÔøΩÔøΩÔøΩŒøÔøΩ ÔøΩÔøΩÔøΩÃµÔøΩÔøΩ ÔøΩÔøΩ–πÔøΩ»£ DBÔøΩÔøΩ ÔøΩÔøΩÔøΩÔøΩ
             	   String signUP = null;
                    signUP = "insert into id_pw values(?,?,?)";
             	   ps = con.prepareStatement(signUP);
@@ -129,12 +125,12 @@ public class TimetableServer {
             ResultSet rs = null;
             try {
                String sql = null;
-               sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "'";
+               sql = "select NAME from id_pw where ID='" + ID + "'";
                ps = con.prepareStatement(sql);
                rs = ps.executeQuery();
 
                if (rs.next()) {
-                  sql = "select NAME from userinfo natural join id_pw where ID='" + ID + "' and PW='" + PW + "'";
+                  sql = "select NAME from id_pw where ID='" + ID + "' and PW='" + PW + "'";
                   ps = con.prepareStatement(sql);
                   rs = ps.executeQuery();
                   if(rs.next()) {
@@ -152,30 +148,62 @@ public class TimetableServer {
             	e.printStackTrace();
             }
         }
-        public void info(String ID, String name, int grade, int semester, Connection con) {
+        public void info(String ID, String Grade, String Semester, Connection con) {
         	PreparedStatement ps = null;
         	ResultSet rs = null;
-            int name_duplicate = 0;
             try {
-               String sql = null;
-               sql = "select name from userinfo where NAME='" + name + "'";
-               ps = con.prepareStatement(sql);
-               rs = ps.executeQuery();
+            	Integer.parseInt(Grade);
+            	Integer.parseInt(Semester);
+            	String sql = null;
+            	sql = "select id from created_table where grade ='" + Integer.parseInt(Grade) + "' and semester = '" +  Integer.parseInt(Semester) + "'";
+            	ps = con.prepareStatement(sql);
+            	rs = ps.executeQuery();
                
-               while(rs.next())
-            	   name_duplicate++; //¡ﬂ∫πµ«¥¬ ¿Ã∏ß ºº±‚
-               
-               if(name_duplicate > 0)
-            	   name = name.concat(Integer.toString(name_duplicate));
-               
-               sql = "insert into userinfo values(?,?,?,?)";
-               ps = con.prepareStatement(sql);
-               ps.setString(1, ID);
-               ps.setString(2, name);
-               ps.setInt(3, grade);
-               ps.setInt(4, semester);
-               
-               ps.executeUpdate();            		   
+            	if(rs.next())
+            		out.println("EXISTTABLE"); 
+            	else
+            		out.println("NEWTABLE");
+            	/*else {
+            		sql = "insert into created_table values(?,?,?)";
+            		ps = con.prepareStatement(sql);
+            		ps.setString(1, ID); 
+            		ps.setInt(2, Integer.parseInt(Grade));
+            		ps.setInt(3, Integer.parseInt(Semester));
+            		ps.executeUpdate();            		   
+            		out.println("NEWTABLE");
+               } */              
+            } catch(SQLException e) {
+            	e.printStackTrace();
+            }
+        }
+        public void getProf(Connection con) {
+        	PreparedStatement ps = null;
+        	ResultSet rs = null;
+            try {
+            	String sql = null;
+            	sql = "select distinct instructor from course where grade ='" + Integer.parseInt(grade) + 
+            			"' and semester = '" +  Integer.parseInt(semester) + "' and major='Ï†ÑÌïÑ'";
+            	ps = con.prepareStatement(sql);
+            	rs = ps.executeQuery();
+            	
+            	instructor[0] = "ÏÉÅÍ¥ÄÏóÜÏùå";
+            	while(rs.next()) {
+            		int i = 1;
+            		instructor[i] = rs.getString(1);
+            		System.out.println(instructor[i]);
+            		i++;
+            	}
+            	//else
+            		//out.println("NEWTABLE");
+            	/*else {
+            		sql = "insert into created_table values(?,?,?)";
+            		ps = con.prepareStatement(sql);
+            		ps.setString(1, ID); 
+            		ps.setInt(2, Integer.parseInt(Grade));
+            		ps.setInt(3, Integer.parseInt(Semester));
+            		ps.executeUpdate();            		   
+            		out.println("NEWTABLE");
+               } */              
             } catch(SQLException e) {
             	e.printStackTrace();
             }
