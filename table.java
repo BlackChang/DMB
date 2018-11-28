@@ -11,6 +11,8 @@ public class table {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+
+		JFrame frame = new JFrame();
 		JFrame frame2 = new JFrame();
 		JPanel panel = new JPanel();
 		ImageIcon icon1 = new ImageIcon(new ImageIcon("C:\\Users\\재신\\chat1.jpg").getImage().getScaledInstance(70,70,Image.SCALE_DEFAULT));
