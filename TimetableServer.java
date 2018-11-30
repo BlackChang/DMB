@@ -163,8 +163,11 @@ public class TimetableServer {
             	ps = con.prepareStatement(sql);
             	rs = ps.executeQuery();
                
-            	if(rs.next())
+            	if(rs.next()) {
             		out.println("EXISTTABLE"); 
+            	//	out.println(grade);
+            		//out.println(semester);
+            	}
             	else
             		out.println("NEWTABLE");
             	/*else {

@@ -21,6 +21,8 @@ public class TimetableClient {
 	private String name;
 	private String prof;
 	private String day;
+	private int grade;
+	private int semester;
 	String status="";
 
 	private String getServerAddress() {
@@ -76,8 +78,13 @@ public class TimetableClient {
         						JOptionPane.WARNING_MESSAGE);	
             }
             else if(status.startsWith("EXISTTABLE")) {
-            	JOptionPane.showMessageDialog(null, "뭐였지", "TIMETABLE",
-						JOptionPane.INFORMATION_MESSAGE);
+            	//grade = in.read();
+            	//semester = in.read();
+            	System.out.println(grade + " " + semester);
+            	DMB_TABLE table = new DMB_TABLE(id, grade, semester);
+            	
+               	table.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            	table.frame.setVisible(true);
             }
             else if(status.startsWith("NEWTABLE")) {
             	DMB_OPTION option = new DMB_OPTION();
@@ -122,6 +129,8 @@ public class TimetableClient {
         */	
     }
     public void signIn(String newID, String newPW) {
+    	this.id = newID;
+    	this.pw = newPW;
     	out.println("SIGNIN");
     	out.println(newID);
     	out.println(newPW);
@@ -134,6 +143,8 @@ public class TimetableClient {
     	out.println(newName);
     }
     public void getInfo(String newGrade, String newSemester) {
+    	this.grade = Integer.parseInt(newGrade);
+    	this.semester = Integer.parseInt(newSemester);
     	out.println("INFO");
     	out.println(newGrade);
     	out.println(newSemester);
@@ -145,6 +156,15 @@ public class TimetableClient {
     }
     public void prof_list(String professor) {
     	out.println("GETPROF");
+    }
+    public String getID() {
+    	return this.id;
+    }
+    public int getGrade() {
+    	return this.grade;
+    }
+    public int getSemester() {
+    	return this.semester;
     }
     //����� ����(�й�, �̸�, �г�, �б�) �Է� �ޱ� ���� frame ����    
 
