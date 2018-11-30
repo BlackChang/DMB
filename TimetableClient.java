@@ -138,7 +138,7 @@ public class TimetableClient {
     	out.println(newGrade);
     	out.println(newSemester);
     }
-    public void option(String professor, String day) {
+    public void getOption(String professor, String day) {
     	out.println("OPTION");
     	out.println(professor);
     	out.println(day);

@@ -6,6 +6,8 @@ import java.net.*;
 import java.nio.charset.Charset;
 
 import com.mysql.jdbc.Connection;
+
+import Network_DMB.timetable_algorithm2_final.Lecture;
 public class TimetableServer {
     private static final int PORT = 9001;
     public static String[] instructor = new String[10];
@@ -34,7 +36,6 @@ public class TimetableServer {
         private BufferedReader in;
         //Ŭ���̾�Ʈ�κ��� ������ �ޱ� ���� ����
         private PrintWriter out;
-        private PrintWriter list;
         //Ŭ���̾𿡰� ������ �������� ���� ����        
         
         public Handler(Socket socket) {
@@ -57,7 +58,6 @@ public class TimetableServer {
     		try {
     			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             	out = new PrintWriter(socket.getOutputStream(),true);
-            	list = new PrintWriter(socket.getOutputStream(),true);
             	while (true) {
                     String line = in.readLine();
                     //�����κ��� ������ �о�� line ������ ����
@@ -82,6 +82,7 @@ public class TimetableServer {
                     else if(line.startsWith("OPTION")) {
                     	prof = in.readLine();
                     	restTime = in.readLine();
+                    	algorithm(con);
                     }         
                 }                    
     	    } catch (IOException e) {
@@ -117,10 +118,6 @@ public class TimetableServer {
                    ps.setString(2, PW);
                    ps.setString(3, NAME);
              	   ps.executeUpdate();
-             	   System.out.println(ps);
-               	   System.out.println(ID);
-             	   System.out.println(PW);
-             	   System.out.println(NAME);
              	   out.println("COMPLETE");
                }
             } catch (SQLException e) {
@@ -191,7 +188,6 @@ public class TimetableServer {
             	sql = "select count(distinct instructor) from course where grade =" + Integer.parseInt(grade) + 
             			" and semester = " +  Integer.parseInt(semester) + " and major='전필'";
             	ps = con.prepareStatement(sql);
-            	System.out.println(ps);
             	rs = ps.executeQuery();
             	int num = 0;
             	if(rs.next())
@@ -200,7 +196,6 @@ public class TimetableServer {
             	sql = "select distinct instructor from course where grade =" + Integer.parseInt(grade) + 
             			" and semester = " +  Integer.parseInt(semester) + " and major='전필'";
             	ps = con.prepareStatement(sql);
-            	System.out.println(ps);
             	rs = ps.executeQuery();
             	
             	instructor[0] = "상관없음";
@@ -235,6 +230,733 @@ public class TimetableServer {
             		ps.executeUpdate();            		   
             		out.println("NEWTABLE");
                } */              
+            } catch(SQLException e) {
+            	e.printStackTrace();
+            }
+        }
+        public static class Lecture{
+    		private String course_id;
+    		private String title;
+    		private String major;
+    		private int grade;
+    		private int semester;
+    		private int credit;
+    		private String instructor;
+    		private int subID;
+    		private String day;
+    		private String time;
+    		private int choose;
+    		
+    		public Lecture() {
+    			this.course_id = "";
+    			this.title = "";
+    			this.major = "";
+    			this.grade = 0;
+    			this.semester = 0;
+    			this.credit = 0;
+    			this.instructor = "";
+    			this.subID = 0;
+    			this.day = "";
+    			this.time = "";
+    			this.choose = 0;
+    		}
+    	}
+        public void algorithm(Connection con) {
+        	PreparedStatement ps = null;
+        	ResultSet rs = null;
+            try {
+            	Lecture[] course = new Lecture[30];
+        		Lecture[] select = new Lecture[30];
+        		for(int k = 0; k < 30; k++)
+        			course[k] = new Lecture();
+         		
+        		for(int k = 0; k < 30; k++)
+         			select[k] = new Lecture();
+         		int count = 0;
+        		int i = 0;
+        		float totalCredit = 0;
+        		int checkPoint = 0;
+        		int location = 0;
+        		int subject = 0;
+        		int[] monday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
+        		int[] tuesday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
+        		int[] wednesday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
+        		int[] thursday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
+        		int[] friday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
+        		String sql = null;
+            	sql = "select * from course natural join timetable where grade = " + grade + " and semester = " + semester + " and day not in (select day from timetable where day = '" + restTime + 
+            			"') and course_id not in (select course_id from timetable where day = '" + restTime + "')";
+    			ps = con.prepareStatement(sql);
+            	rs = ps.executeQuery();
+    			
+    			while(rs.next()) {
+    				course[i].course_id = rs.getString(1);
+    				if(rs.wasNull())
+    					course[i].course_id = "";
+    				
+    				course[i].title = rs.getString(2);
+    				if(rs.wasNull())
+    					course[i].title = "";
+    				
+    				course[i].major = rs.getString(3);
+    				if(rs.wasNull())
+    					course[i].major = "";
+    				
+    				course[i].grade = rs.getInt(4);
+    				if(rs.wasNull())
+    					course[i].grade = 0;
+    				
+    				course[i].semester = rs.getInt(5);
+    				if(rs.wasNull())
+    					course[i].semester = 0;
+    				
+    				course[i].credit = rs.getInt(6);
+    				if(rs.wasNull())
+    					course[i].credit = 0;
+    				
+    				course[i].instructor = rs.getString(7);
+    				if(rs.wasNull())
+    					course[i].instructor = "";
+
+    				course[i].subID = rs.getInt(8);
+    				if(rs.wasNull())
+    					course[i].subID = 0;
+
+    				course[i].day = rs.getString(9);
+    				if(rs.wasNull())
+    					course[i].day = "";
+    				
+    				course[i].time = rs.getString(10);
+    				if(rs.wasNull())
+    					course[i].time = "";
+    				
+    				course[i].choose = 0;
+    				i++;
+    			}
+    			for(int k = 0; k < i; k++) {
+    				if(course[k].instructor.equalsIgnoreCase(prof)) {
+    					String hour;
+    					hour = course[k].time;
+    					int time, length, firstTime, lastTime;
+    					
+    					length = hour.length();
+    					firstTime = (hour.charAt(0))-'0';
+    					lastTime = hour.charAt(length-1)-'0';
+    					
+    					if(course[k].day.equalsIgnoreCase("월")) {
+    						for(int j = firstTime; j <= lastTime; j++)
+    							monday[j] = 1;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("화")) {
+    						for(int j = firstTime; j <= lastTime; j++)
+    							tuesday[j] = 1;
+    					} 
+    					else if(course[k].day.equalsIgnoreCase("수")) {
+    						for(int j = firstTime; j <= lastTime; j++)
+    							wednesday[j] = 1;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("목")) {
+    						for(int j = firstTime; j <= lastTime; j++)
+    							thursday[j] = 1;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("금")) {
+    						for(int j = firstTime; j <= lastTime; j++)
+    							friday[j] = 1;
+    					}
+    					totalCredit = totalCredit + course[k].credit;
+    					select[count] = course[k];
+    					count++;
+    					course[k].choose = 1;
+    					for(int s = 0; s < i; s++) {
+    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) {
+    							hour = course[s].time;
+    							length = hour.length();
+    	    					firstTime = (hour.charAt(0))-'0';
+    	    					lastTime = hour.charAt(length-1)-'0';
+    	    		
+    	    					if(course[s].day.equalsIgnoreCase("월")) {
+    								for(int j = firstTime; j <= lastTime; j++)
+    									monday[j] = 1;
+    							}
+    							else if(course[s].day.equalsIgnoreCase("화")) {
+    								for(int j = firstTime; j <= lastTime; j++)
+    									tuesday[j] = 1;
+    							} 
+    							else if(course[s].day.equalsIgnoreCase("수")) {
+    								for(int j = firstTime; j <= lastTime; j++)
+    									wednesday[j] = 1;
+    							}
+    							else if(course[s].day.equalsIgnoreCase("목")) {
+    								for(int j = firstTime; j <= lastTime; j++)
+    									thursday[j] = 1;
+    							}
+    							else if(course[s].day.equalsIgnoreCase("금")) {
+    								for(int j = firstTime; j <= lastTime; j++)
+    									friday[j] = 1;
+    							}
+    							select[count] = course[s];
+    							count++;
+    							course[s].choose = 1;
+    						}
+    					}
+    					
+    					for(int s = 0; s < i; s++) {
+    						if(course[k].title.equalsIgnoreCase(course[s].title))
+    							course[s].choose = 1;
+    					}
+    					break;
+    				}
+    			}
+    			
+    			for(int k = 0; k < i; k++) {
+    				String hour;
+    				int time, length, firstTime, lastTime;
+    				if(course[k].major.equalsIgnoreCase("전필") && course[k].choose != 1) {			
+    					hour = course[k].time;
+    					length = hour.length();
+    					firstTime = (hour.charAt(0))-'0';
+    					lastTime = hour.charAt(length-1)-'0';
+    		
+    					if(course[k].day.equalsIgnoreCase("월")) {
+    						if(monday[firstTime] == 0 && monday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								monday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("화")) {
+    						if(tuesday[firstTime] == 0 && tuesday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								tuesday[j] = 1;
+    						}
+    						else
+    							continue;
+    					} 
+    					else if(course[k].day.equalsIgnoreCase("수")) {
+    						if(wednesday[firstTime] == 0 && wednesday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								wednesday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("목")) {
+    						if(thursday[firstTime] == 0 && thursday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								thursday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("금")) {
+    						if(friday[firstTime] == 0 && friday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								friday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					course[k].choose = 1;
+    					subject = 1;
+    					for(int s = 0; s < i; s++) {
+    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) {
+    							subject = 2;
+    							String hour2;
+    							hour2 = course[s].time;
+    							int time2, length2, firstTime2, lastTime2;
+    							
+    							length2 = hour2.length();
+    	    					firstTime2 = (hour2.charAt(0))-'0';
+    	    					lastTime2 = hour2.charAt(length2-1)-'0';
+    	    		
+    	    					if(course[s].day.equalsIgnoreCase("월")) {
+    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										monday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("화")) {
+    								if(tuesday[firstTime2] == 0 && tuesday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										tuesday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							} 
+    							else if(course[s].day.equalsIgnoreCase("수")) {
+    								if(wednesday[firstTime2] == 0 && wednesday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										wednesday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("목")) {
+    								if(thursday[firstTime2] == 0 && thursday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										thursday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("금")) {
+    								if(friday[firstTime2] == 0 && friday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										friday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    						}
+    					}
+    					
+    					if(checkPoint == 1) {
+    						if(course[k].day.equalsIgnoreCase("월")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								monday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("화")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								tuesday[j] = 0;
+    						} 
+    						else if(course[k].day.equalsIgnoreCase("수")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								wednesday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("목")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								thursday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("금")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								friday[j] = 0;
+    						}
+    						subject = 0;
+    						continue;
+    					}
+    					
+    					if(subject == 1) {
+    						totalCredit = totalCredit + course[k].credit;
+    						select[count] = course[k];
+    						count++;
+    						course[k].choose = 1;
+    					}
+    					else if(subject == 2) {
+    						totalCredit = totalCredit + course[k].credit;
+    						select[count] = course[k];
+    						count++;
+    						select[count] = course[location];
+    						count++;
+    						course[k].choose = 1;
+    						course[location].choose = 1;
+    					}
+    					
+    					for(int s = 0; s < i; s++) {
+    						if(course[k].title.equalsIgnoreCase(course[s].title))
+    							course[s].choose = 1;
+    					}
+    					location = 0;
+    					checkPoint = 0;
+    				}
+    			}
+    			
+    			for(int k = 0; k < i; k++) {
+    				String hour;
+    				int time, length, firstTime, lastTime;
+    				if(course[k].major.equalsIgnoreCase("전필") && course[k].choose != 1) {			
+    					hour = course[k].time;
+    					length = hour.length();
+    					firstTime = (hour.charAt(0))-'0';
+    					lastTime = hour.charAt(length-1)-'0';
+    		
+    					if(course[k].day.equalsIgnoreCase("월")) {
+    						if(monday[firstTime] == 0 && monday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								monday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("화")) {
+    						if(tuesday[firstTime] == 0 && tuesday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								tuesday[j] = 1;
+    						}
+    						else
+    							continue;
+    					} 
+    					else if(course[k].day.equalsIgnoreCase("수")) {
+    						if(wednesday[firstTime] == 0 && wednesday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								wednesday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("목")) {
+    						if(thursday[firstTime] == 0 && thursday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								thursday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("금")) {
+    						if(friday[firstTime] == 0 && friday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								friday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					course[k].choose = 1;
+    					subject = 1;
+    					for(int s = 0; s < i; s++) {
+    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) {
+    							subject = 2;
+    							String hour2;
+    							hour2 = course[s].time;
+    							int time2, length2, firstTime2, lastTime2;
+    							length2 = hour2.length();
+    	    					firstTime2 = (hour2.charAt(0))-'0';
+    	    					lastTime2 = hour2.charAt(length2-1)-'0';
+    	    				if(course[s].day.equalsIgnoreCase("월")) {
+    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										monday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("화")) {
+    								if(tuesday[firstTime2] == 0 && tuesday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										tuesday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							} 
+    							else if(course[s].day.equalsIgnoreCase("수")) {
+    								if(wednesday[firstTime2] == 0 && wednesday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										wednesday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("목")) {
+    								if(thursday[firstTime2] == 0 && thursday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										thursday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("금")) {
+    								if(friday[firstTime2] == 0 && friday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										friday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    						}
+    					}
+    					
+    					if(checkPoint == 1) {
+    						if(course[k].day.equalsIgnoreCase("월")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								monday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("화")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								tuesday[j] = 0;
+    						} 
+    						else if(course[k].day.equalsIgnoreCase("수")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								wednesday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("목")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								thursday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("금")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								friday[j] = 0;
+    						}
+    						subject = 0;
+    						continue;
+    					}
+    					
+    					if((totalCredit + course[k].credit) > 17)
+    						break;
+    					
+    					if(subject == 1) {
+    						totalCredit = totalCredit + course[k].credit;
+    						select[count] = course[k];
+    						count++;
+    						course[k].choose = 1;
+    					}
+    					else if(subject == 2) {
+    						totalCredit = totalCredit + course[k].credit;
+    						select[count] = course[k];
+    						count++;
+    						select[count] = course[location];
+    						count++;
+    						course[k].choose = 1;
+    						course[location].choose = 1;
+    					}
+    					for(int s = 0; s < i; s++) {
+    						if(course[k].title.equalsIgnoreCase(course[s].title))
+    							course[s].choose = 1;
+    					}
+    					location = 0;
+    					checkPoint = 0;
+    				}
+    			}
+    			
+    			for(int k = 0; k < i; k++) {
+    				String hour;
+    				int time, length, firstTime, lastTime;
+    				if(course[k].choose != 1) {			
+    					hour = course[k].time;
+    					length = hour.length();
+    					firstTime = (hour.charAt(0))-'0';
+    					lastTime = hour.charAt(length-1)-'0';
+    		
+    					if(course[k].day.equalsIgnoreCase("월")) {
+    						if(monday[firstTime] == 0 && monday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								monday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("화")) {
+    						if(tuesday[firstTime] == 0 && tuesday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								tuesday[j] = 1;
+    						}
+    						else
+    							continue;
+    					} 
+    					else if(course[k].day.equalsIgnoreCase("수")) {
+    						if(wednesday[firstTime] == 0 && wednesday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								wednesday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("목")) {
+    						if(thursday[firstTime] == 0 && thursday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								thursday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					else if(course[k].day.equalsIgnoreCase("금")) {
+    						if(friday[firstTime] == 0 && friday[lastTime] == 0) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								friday[j] = 1;
+    						}
+    						else
+    							continue;
+    					}
+    					course[k].choose = 1;
+    					subject = 1;
+    					for(int s = 0; s < i; s++) {
+    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) {
+    							subject = 2;
+    							String hour2;
+    							hour2 = course[s].time;
+    							int time2, length2, firstTime2, lastTime2;
+    							length2 = hour2.length();
+    	    					firstTime2 = (hour2.charAt(0))-'0';
+    	    					lastTime2 = hour2.charAt(length2-1)-'0';
+    	    					if(course[s].day.equalsIgnoreCase("월")) {
+    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										monday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("화")) {
+    								if(tuesday[firstTime2] == 0 && tuesday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										tuesday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							} 
+    							else if(course[s].day.equalsIgnoreCase("수")) {
+    								if(wednesday[firstTime2] == 0 && wednesday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										wednesday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("목")) {
+    								if(thursday[firstTime2] == 0 && thursday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										thursday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    							else if(course[s].day.equalsIgnoreCase("금")) {
+    								if(friday[firstTime2] == 0 && friday[lastTime2] == 0) {	
+    									for(int j = firstTime2; j <= lastTime2; j++)
+    										friday[j] = 1;
+    									location = s;
+    								}
+    								else {
+    									course[k].choose = 0;
+    									checkPoint = 1;
+    									break;
+    								}
+    							}
+    						}
+    					}
+    					
+    					if(checkPoint == 1) {
+    						if(course[k].day.equalsIgnoreCase("월")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								monday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("화")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								tuesday[j] = 0;
+    						} 
+    						else if(course[k].day.equalsIgnoreCase("수")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								wednesday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("목")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								thursday[j] = 0;
+    						}
+    						else if(course[k].day.equalsIgnoreCase("금")) {	
+    							for(int j = firstTime; j <= lastTime; j++)
+    								friday[j] = 0;
+    						}
+    						subject = 0;
+    						continue;
+    					}
+    					if((totalCredit + course[k].credit) > 17)
+    						break;
+    					
+    					if(subject == 1) {
+    						totalCredit = totalCredit + course[k].credit;
+    						select[count] = course[k];
+    						count++;
+    						course[k].choose = 1;
+    					}
+    					else if(subject == 2) {
+    						totalCredit = totalCredit + course[k].credit;
+    						select[count] = course[k];
+    						count++;
+    						select[count] = course[location];
+    						count++;
+    						course[k].choose = 1;
+    						course[location].choose = 1;
+    					}
+    					
+    					for(int s = 0; s < i; s++) {
+    						if(course[k].title.equalsIgnoreCase(course[s].title))
+    							course[s].choose = 1;
+    					}
+    					location = 0;
+    					checkPoint = 0;
+    				}
+    			}
+    			sql = "insert into created_table values(?,?,?)";
+    			ps = con.prepareStatement(sql);
+    			ps.setString(1,id);
+    			ps.setInt(2, Integer.parseInt(grade));
+    			ps.setInt(3, Integer.parseInt(semester));
+    			ps.executeUpdate();
+    			for(int k = 0; k < select.length; k++) {
+        			if(select[k].grade == 0)
+        				break;
+    				String nsql = null;
+        			nsql = "insert into takes values(?,?,?,?,?,?,?,?,?,?,?)";
+        			ps = con.prepareStatement(nsql);
+        			ps.setString(1, id);
+        			ps.setString(2, select[k].course_id);
+        			ps.setString(3, select[k].title);
+        			ps.setString(4, select[k].major);
+        			ps.setInt(5, select[k].grade);
+        			ps.setInt(6, select[k].semester);
+        			ps.setInt(7, select[k].credit);
+        			ps.setString(8, select[k].instructor);
+        			ps.setInt(9, select[k].subID);
+        			ps.setString(10, select[k].day);
+        			ps.setString(11, select[k].time);
+        			ps.executeUpdate();
+    			}
             } catch(SQLException e) {
             	e.printStackTrace();
             }
