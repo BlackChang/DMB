@@ -7,6 +7,13 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 public class DMB_OPTION {
+	// chat room
+	JFrame fr = new JFrame("Room #" );
+	static JTextField tf = new JTextField(20);
+	static JTextArea text = new JTextArea(10, 20);
+	static DefaultListModel<String> model = new DefaultListModel<String>();
+    JList list;
+    // chat room
 	static JFrame optionWindow = new JFrame("OPTION");
 	static JFrame preference = new JFrame("PREFERENCE");
 	String prof;
@@ -27,7 +34,8 @@ public class DMB_OPTION {
 		create.setBorderPainted(false);
 		create.setBackground(new Color(222,110,70));
 		create.setForeground(Color.white);
-
+		create.setOpaque(true);
+		
 		JButton back = new JButton("돌아가기");
 		back.setBounds(235, 30, 200, 200);
 		iPanel.add(back);
@@ -35,7 +43,37 @@ public class DMB_OPTION {
 		back.setBorderPainted(false);
 		back.setBackground(new Color(222,110,70));
 		back.setForeground(Color.white);
-
+		back.setOpaque(true);
+		
+		JButton chat = new JButton("채팅하기");
+		chat.setBounds(50, 250, 200, 200);
+		iPanel.add(chat);
+		chat.setFont(new Font("",Font.PLAIN, 30));
+		chat.setBackground(new Color(222,110,70));
+		chat.setOpaque(true);
+		chat.setBorderPainted(false);
+		
+		chat.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				list = new JList(model);
+    				fr.getContentPane().add(list, "East");
+				fr.getContentPane().add(tf, "North");
+		        fr.getContentPane().add(new JScrollPane(text), "Center");
+		        tf.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
+		        	{
+            			public void actionPerformed(ActionEvent e)
+            			{
+            				TimetableClient.out.println(tf.getText());
+            				tf.setText("");
+            			}
+		        	});
+		        fr.setVisible(true);
+		        fr.pack();
+			}
+		});
+		
 		create.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				optionWindow.dispose();
@@ -64,13 +102,8 @@ public class DMB_OPTION {
 		lblOption.setFont(new Font("배달의민족 도현", Font.PLAIN, 20));
 		lblOption.setForeground(new Color(222,110,70));
 
-		String[] prof_list = new String[3];
-		int i=0;
-		while(i<10) {
-			System.out.println(TimetableServer.instructor[i]);
-			i++;
-		}
-		JComboBox<String> profBox = new JComboBox<String>(TimetableServer.instructor);
+		
+		JComboBox<String> profBox = new JComboBox<String>(TimetableClient.prof_list);
 		profBox.setBackground(Color.white);
 		profBox.setBounds(30, 70, 120, 30);
 		profBox.setFont(new Font("배달의민족 도현", Font.PLAIN, 20));
@@ -105,8 +138,9 @@ public class DMB_OPTION {
 		check.setBorderPainted(false);
 		check.setBackground(new Color(222,110,70));
 		check.setForeground(Color.white);
+		check.setOpaque(true);
 
-		//prof = profBox.getSelectedItem().toString();
+		prof = profBox.getSelectedItem().toString();
 		restTime = dayBox.getSelectedItem().toString();
 
 		profBox.addItemListener(new ItemListener(){
@@ -121,10 +155,10 @@ public class DMB_OPTION {
 		});
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				TimetableClient.client.getOption(prof,restTime);
 				System.out.println(prof + " " + restTime);
 				preference.dispose();				
 			}
 		});
-
 	}
 }

@@ -56,7 +56,7 @@ public class DMB_INFO {
 		check.setBorderPainted(false);
 		check.setBackground(new Color(222,110,70));
 		check.setForeground(Color.white);
-
+		check.setOpaque(true);
 		grade = gradeBox.getSelectedItem().toString();
 		semester = semBox.getSelectedItem().toString();
 

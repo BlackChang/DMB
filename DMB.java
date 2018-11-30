@@ -1,25 +1,16 @@
 package Network_DMB;
 import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
-
 import javax.swing.*;
 import java.awt.event.*;
 public class DMB {
 	JFrame initWindow = new JFrame("8 TIMES IN LIFE");
 	JFrame signUP = new JFrame("회원가입");
-	String id;
+	static String id;
 	String pw;
 	String name;
 	String prof;
 	String day;
-	// chat room
-	JFrame fr = new JFrame("Room #" );
-	JTextField tf = new JTextField(20);
-	static JTextArea text = new JTextArea(10, 20);
-	static DefaultListModel<String> model = new DefaultListModel<String>();
-    JList list;
-    // chat room
 	public DMB() throws IOException {
 		JTextField IDtextField;
 		JPasswordField passwordField;
@@ -63,8 +54,9 @@ public class DMB {
 		iPanel.add(signIn);
 		signIn.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
 		signIn.setBorderPainted(false);
-		signIn.setBackground(Color.black);
-		signIn.setForeground(Color.black);
+		signIn.setBackground(new Color(222,110,70));
+		signIn.setForeground(Color.white);
+		signIn.setOpaque(true);
 		
 		JButton signUp = new JButton("회원가입");
 		signUp.setBounds(155, 395, 95, 30);
@@ -73,15 +65,7 @@ public class DMB {
 		signUp.setBorderPainted(false);
 		signUp.setBackground(new Color(222,110,70));
 		signUp.setForeground(Color.white);
-		
-		JButton chat = new JButton("채팅하기");
-		chat.setBounds(50, 420, 95, 30);
-		iPanel.add(chat);
-		chat.setFont(new Font("",Font.PLAIN, 15));
-		chat.setBorderPainted(false);
-		chat.setBackground(Color.black);
-		chat.setForeground(Color.black);
-			
+						
 		signUP.setBounds(125, 130, 275, 330);
 		signUP.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		
@@ -131,7 +115,6 @@ public class DMB {
 		signUpButton.setBackground(new Color(222,110,70));
 		signUpButton.setForeground(Color.white);
 		contentPane.add(signUpButton);
-
 		
 	
 		signUpButton.addActionListener(new ActionListener() {
@@ -174,27 +157,6 @@ public class DMB {
 				signUP.setVisible(true);
 			}
 		});
-		//When chat room button is pushed
-		chat.addActionListener(new ActionListener()
-		{
-			public void actionPerformed(ActionEvent e)
-			{
-				list = new JList(model);
-    				fr.getContentPane().add(list, "East");
-				fr.getContentPane().add(tf, "North");
-		        fr.getContentPane().add(new JScrollPane(text), "Center");
-		        tf.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
-		        	{
-            			public void actionPerformed(ActionEvent e)
-            			{
-            				TimetableClient.out.println(tf.getText());
-            				tf.setText("");
-            			}
-		        	});
-		        fr.setVisible(true);
-		        fr.pack();
-			}
-    });
 	}	
 }
 
