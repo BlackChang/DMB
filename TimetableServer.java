@@ -128,15 +128,15 @@ public class TimetableServer {
     		
     		finally
             {
-            		for (PrintWriter writer : writers) // 사용자가 나가서 스레드가 끝났음을 모든 클라이언트에게 제공 
-                {
-            			list.remove(name);
-            			writer.println("LIST " + "- " + name);
-            			writer.println("MESSAGE " + name + " EXIT ROOM...");
-                }
                 if (name != null)
                 {
                     names.remove(name);
+                    for (PrintWriter writer : writers) // 사용자가 나가서 스레드가 끝났음을 모든 클라이언트에게 제공 
+                    {
+                			list.remove(name);
+                			writer.println("LIST " + "- " + name);
+                			writer.println("MESSAGE " + name + " EXIT ROOM...");
+                    }
                 }
                 if (out != null) 
                 {

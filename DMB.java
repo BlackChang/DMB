@@ -8,7 +8,7 @@ public class DMB {
 	JFrame signUP = new JFrame("회원가입");
 	static String id;
 	String pw;
-	String name;
+	static String name;
 	String prof;
 	String day;
 	public DMB() throws IOException {

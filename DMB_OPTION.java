@@ -8,11 +8,18 @@ import javax.swing.border.EmptyBorder;
 import java.awt.event.*;
 public class DMB_OPTION {
 	// chat room
-	JFrame fr = new JFrame("Room #" );
+	JFrame fr = new JFrame(TimetableClient.origin + " Chatting Room" );
 	static JTextField tf = new JTextField(20);
 	static JTextArea text = new JTextArea(10, 20);
 	static DefaultListModel<String> model = new DefaultListModel<String>();
     JList list;
+    // chat room
+	// Whisper chat room
+	JFrame frw = new JFrame(TimetableClient.origin + " Whisper Room" );
+	static JTextField tfw = new JTextField(20);
+	static JTextArea textw = new JTextArea(10, 20);
+	static DefaultListModel<String> modelw = new DefaultListModel<String>();
+    JList listw;
     // chat room
 	static JFrame optionWindow = new JFrame("OPTION");
 	static JFrame preference = new JFrame("PREFERENCE");
@@ -71,6 +78,33 @@ public class DMB_OPTION {
 		        	});
 		        fr.setVisible(true);
 		        fr.pack();
+		        list.addMouseListener(new MouseAdapter() //List double click event
+		        { 
+				    public void mouseClicked(MouseEvent evt) 
+				    { 
+				    		list = (JList)evt.getSource();
+				    		if (evt.getClickCount() == 2) 
+				    		{ 
+				    			listw = new JList(modelw);
+				    			modelw.clear();
+				    			modelw.addElement(TimetableClient.origin);
+				    			modelw.addElement(list.getSelectedValue().toString());
+			    				frw.getContentPane().add(listw, "East");
+							frw.getContentPane().add(tfw, "North");
+					        frw.getContentPane().add(new JScrollPane(textw), "Center");
+					        tfw.addActionListener(new ActionListener()// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
+					        	{
+			            			public void actionPerformed(ActionEvent e)
+			            			{
+			            				TimetableClient.out.println("WHISPER " + list.getSelectedValue().toString() + " " + tfw.getText());
+			            				tfw.setText("");
+			            			}
+					        	});
+					        frw.setVisible(true);
+					        frw.pack();
+				    		} 
+				    } 
+				}); 
 			}
 		});
 		

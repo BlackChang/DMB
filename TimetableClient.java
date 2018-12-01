@@ -24,9 +24,8 @@ public class TimetableClient {
 	private String prof;
 	private String day;
 	String status="";
-	private String origin;
+	static String origin="";
 	static ArrayList<String> chatList = new ArrayList<String>();//chat member name 
-	public static String w="";
 	private String getServerAddress() {
         return JOptionPane.showInputDialog(
             frame,
@@ -142,6 +141,7 @@ public class TimetableClient {
     	out.println("SIGNIN");
     	out.println(newID);
     	out.println(newPW);
+    	
     }
     
     public void signUp(String newID, String newPW, String newName) {
@@ -171,9 +171,14 @@ public class TimetableClient {
     		if (line.startsWith("+"))
     		{
     			line = line.substring(2);
+    			
     			chatList.clear();
     			DMB_OPTION.model.clear();
     			String[] s = line.split(",");
+    			if(origin.isEmpty())
+    			{
+    				origin = s[s.length-1];
+    			}
     			for(int x=0; x < s.length;x++)
     			{
     				chatList.add(s[x]);
@@ -195,14 +200,16 @@ public class TimetableClient {
     {
         String[] temp = line.split(" ");
 		String x = null;
-    		if((temp[1].equalsIgnoreCase(origin) || temp[temp.length-1].equalsIgnoreCase(origin))&& temp[0].equals("WHISPER"))
+		if((temp[1].equalsIgnoreCase(origin) || temp[temp.length-1].equalsIgnoreCase(origin)) && temp[0].equals("WHISPER"))
         {
         		x = temp[2];
         		for(int k=3;k < temp.length-1;k++)
         			x = x + " " + temp[k];
-        		DMB_OPTION.text.append("<Whisper message from " + temp[temp.length-1] + " to " + w + " : " + x + ">\n");//구분지은뒤 채팅을 클라이언트에 보여준다.
-        		w = "";// 위스퍼가완료되면 초기화시킨다.   
+        		if(!x.isEmpty())
+        			DMB_OPTION.textw.append(temp[temp.length-1] + " : " + x + "\n");
         }
+		if((temp[1].equalsIgnoreCase(origin)) && temp[0].equals("WHISPER") && !x.isEmpty())
+        		DMB_OPTION.text.append("You receive Whisper message from " + temp[temp.length-1] + "\n");//구분지은뒤 채팅을 클라이언트에 보여준다.
     }
     public static void main(String[] args) throws Exception {
     	client  = new TimetableClient();
