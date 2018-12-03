@@ -46,7 +46,6 @@ public class DMB_TABLE {
 	        String user = "root", passwd = "12345";
 	        con = (Connection) DriverManager.getConnection(url, user, passwd);
 	        
-	        System.out.println(id + " " + grade + " " + semester);
 	        String sql = "select title, day, time from takes where grade=" + grade + " and semester=" + semester + " and id='" +  id + "'";
 	        ps = (PreparedStatement) con.prepareStatement(sql);
 			rs = ps.executeQuery(sql);
@@ -70,7 +69,7 @@ public class DMB_TABLE {
 		        String day = rs.getString(2);
 		        if (rs.wasNull())
 		        	day = "null";
-		        System.out.println(day);
+	
 		        String hour = rs.getString(3);
 		        if(rs.wasNull())
 		        	hour = "null";
@@ -118,10 +117,12 @@ public class DMB_TABLE {
 			
 			
 			table.setRowHeight(60); // row의 높이 조절
-			table.setPreferredScrollableViewportSize(new Dimension(1000,550));
-			table.getTableHeader().setFont(new Font("배달의민족 도현",Font.PLAIN,20));
+			table.setPreferredScrollableViewportSize(new Dimension(1000,580));
+			table.getTableHeader().setFont(new Font("배달의민족 도현",Font.PLAIN,30));
+			table.getTableHeader().setBackground(new Color(220,110,70));
+			table.getTableHeader().setForeground(Color.white);
 			contentPane.add(panel,BorderLayout.SOUTH);
-			
+			table.setBackground(Color.white);
 					
 					
 			DefaultTableCellRenderer center = new DefaultTableCellRenderer();
@@ -134,7 +135,6 @@ public class DMB_TABLE {
 				  		
 			scrollpane.setSize(500,200);
 			frame.add(scrollpane);
-			frame.setSize(500,200);
 			frame.setBounds(100,100,1000,400);	
 			frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			frame.pack();
@@ -145,18 +145,28 @@ public class DMB_TABLE {
 			JButton chat = new JButton("채팅하기");
 			chat.setBounds(50, 250, 200, 200);
 			panel.add(chat);
-			chat.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
-			chat.setBackground(Color.white);
+			panel.setBackground(Color.white);
+			chat.setFont(new Font("배달의민족 도현",Font.PLAIN, 30));
+			chat.setBackground(new Color(220, 110, 70));
 			chat.setOpaque(true);
-			chat.setForeground(Color.black);
+			chat.setForeground(Color.white);
 			chat.setBorderPainted(false);
 			tf.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
 			tfw.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
 			text.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
 			textw.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
-			tf.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
+			
+			tf.setForeground(new Color(220, 110, 70));
+			tfw.setForeground(new Color(220, 110, 70));
+			text.setForeground(new Color(220, 110, 70));
+			textw.setForeground(new Color(220, 110, 70));			
 			
 			list = new JList(chat_model);
+			list.setBackground(Color.white);
+			list.setForeground(new Color(220,110,70));
+			list.setFont(new Font("배달의민족 도현", Font.PLAIN,20));
+			
+			
 			fr.setBounds(100,100,1000, 300);
 			fr.setPreferredSize(new Dimension(500,300));
 			frw.setPreferredSize(new Dimension(500,300));
@@ -179,7 +189,11 @@ public class DMB_TABLE {
 			    		modelw.clear();
 			    		modelw.addElement(TimetableClient.origin);
 			    		modelw.addElement(list.getSelectedValue().toString());
-			    		frw.setSize(1000, 300);
+			    		listw = new JList(modelw);
+						listw.setBackground(Color.white);
+						listw.setForeground(new Color(220,110,70));
+						listw.setFont(new Font("배달의민족 도현", Font.PLAIN,20));		
+						frw.setSize(1000, 300);
 		    			frw.getContentPane().add(listw, "East");
 		    			frw.getContentPane().add(tfw, "North");
 		    			frw.getContentPane().add(new JScrollPane(textw), "Center");

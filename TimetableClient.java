@@ -7,9 +7,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.*;
+
+import com.mysql.jdbc.Connection;
 
 public class TimetableClient {
     static TimetableClient client;
@@ -36,8 +41,22 @@ public class TimetableClient {
             JOptionPane.QUESTION_MESSAGE);
     }
     //���� IP�ּ� �ޱ� ���� frame ����     
-    private void run() throws IOException {
-        String serverAddress = getServerAddress();
+    private void run() throws IOException, SQLException {
+    	Connection con = null;
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			String url = "jdbc:mysql://localhost:3306/timedb?useUnicode=true&characterEncoding=utf8";
+			String user = "root"; 
+			String pw = "12345";
+			con = (Connection) DriverManager.getConnection(url, user, pw);
+			System.out.println(con);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} 
+		
+		String serverAddress = getServerAddress();
         Socket socket = new Socket(serverAddress, 9001);
         
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -89,7 +108,15 @@ public class TimetableClient {
               }
             else if(status.startsWith("NEWTABLE")) {
             	DMB_OPTION option = new DMB_OPTION();
-               	option.optionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    			PreparedStatement pps;
+    			String sql;
+    			sql = "insert into created_table values(?,?,?)";
+    			pps = con.prepareStatement(sql);
+    			pps.setString(1,id);
+    			pps.setInt(2, grade);
+    			pps.setInt(3, semester);
+    			pps.executeUpdate();
+    			option.optionWindow.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 option.optionWindow.setVisible(true);
             }
             else if(status.startsWith("PROFLIST")) {

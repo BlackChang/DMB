@@ -103,7 +103,6 @@ public class TimetableServer {
                     else if(line.startsWith("OPTION")) {
                     	prof = in.readLine();
                     	restTime = in.readLine();
-            			System.out.println(prof +  restTime+ grade+semester);
             			algorithm(con);
                     }  
                     else//아닐시 일반적인채팅기능  
@@ -967,7 +966,7 @@ public class TimetableServer {
     				}
     			}
 
-    			for(int k = 0; k < select.length; k++) {
+    			for(int k = 0; k < count; k++) {
         			if(select[k].grade == 0)
         				break;
     				String nsql = null;
@@ -986,13 +985,6 @@ public class TimetableServer {
         			ps.setString(11, select[k].time);
         			ps.executeUpdate();
     			}
-    			PreparedStatement pps;
-    			sql = "insert into created_table values(?,?,?)";
-    			pps = con.prepareStatement(sql);
-    			pps.setString(1,id);
-    			pps.setInt(2, Integer.parseInt(grade));
-    			pps.setInt(3, Integer.parseInt(semester));
-    			pps.executeUpdate();
 
     			out.println("CREATED");
             } catch(SQLException e) {

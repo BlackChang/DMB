@@ -72,7 +72,6 @@ public class DMB_INFO {
 		});
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(grade + " " + semester);
 				TimetableClient.client.getInfo(grade, semester);
 				infoWindow.dispose();
 			}

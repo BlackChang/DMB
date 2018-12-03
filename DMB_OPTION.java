@@ -128,9 +128,7 @@ public class DMB_OPTION {
 		check.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				TimetableClient.client.getOption(prof,restTime);
-				System.out.println(prof + " " + restTime);
 				preference.dispose();				
-				TimetableClient.client.getOption(prof,restTime);
 			}
 		});
 	}
