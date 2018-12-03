@@ -65,6 +65,10 @@ public class DMB_OPTION {
 			public void actionPerformed(ActionEvent e)
 			{
 				list = new JList(model);
+				list.setBackground(Color.red);
+				list.setForeground(Color.white);
+				list.setFont(new Font("배달의민족 도현",Font.BOLD,14));
+				list.setOpaque(true);
     				fr.getContentPane().add(list, "East");
 				fr.getContentPane().add(tf, "North");
 		        fr.getContentPane().add(new JScrollPane(text), "Center");
