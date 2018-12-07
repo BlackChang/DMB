@@ -14,7 +14,7 @@ public class TimetableServer {
     private static final int PORT = 9001;
     public static String[] instructor = new String[10];
     static ArrayList<String> names = new ArrayList<String>();
-    //Ŭ���̾�Ʈ���� �̸��� �����س��� ArrayList
+    //클占쏙옙占싱억옙트占쏙옙占쏙옙 占싱몌옙占쏙옙 占쏙옙占쏙옙占쌔놂옙占쏙옙 ArrayList
   
 	public static void main(String[] args) throws Exception{
 		System.out.println("Server start..\n");
@@ -36,9 +36,9 @@ public class TimetableServer {
     	private String restTime;
         private Socket socket;
         private BufferedReader in;
-        //Ŭ���̾�Ʈ�κ��� ������ �ޱ� ���� ����
+        //클占쏙옙占싱억옙트占싸븝옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쌨깍옙 占쏙옙占쏙옙 占쏙옙占쏙옙
         private PrintWriter out;
-        //Ŭ���̾𿡰� ������ �������� ���� ����        
+        //클占쏙옙占싱언에곤옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙        
         
         public Handler(Socket socket) {
             this.socket = socket;
@@ -64,14 +64,14 @@ public class TimetableServer {
             	while (true) 
             	{
                     String line = in.readLine();
-                    //�����κ��� ������ �о�� line ������ ����
+                    //占쏙옙占쏙옙占싸븝옙占쏙옙 占쏙옙占쏙옙占쏙옙 占싻억옙占� line 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙
                     if (line.startsWith("SIGNUP")) 
                     {
                         id = in.readLine(); 
                         pw = in.readLine();
                         name = in.readLine();
                         signUp(id, pw, name, con);
-                        //�����κ��� �о�� �����Ͱ� SUBMITNAME�� �� getName�Լ� �̿뿡 ����� �̸� �Է� ����
+                        //占쏙옙占쏙옙占싸븝옙占쏙옙 占싻억옙占� 占쏙옙占쏙옙占싶곤옙 SUBMITNAME占쏙옙 占쏙옙 getName占쌉쇽옙 占싱용에 占쏙옙占쏙옙占� 占싱몌옙 占쌉뤄옙 占쏙옙占쏙옙
                     }
                     else if(line.startsWith("SIGNIN")) 
                     {
@@ -105,13 +105,13 @@ public class TimetableServer {
                     	restTime = in.readLine();
             			algorithm(con);
                     }  
-                    else//아닐시 일반적인채팅기능  
+                    else//�븘�땺�떆 �씪諛섏쟻�씤梨꾪똿湲곕뒫  
                     {
-                    		for (PrintWriter writer : writers) // 모든 클라이언트에게 전송한다  
+                    		for (PrintWriter writer : writers) // 紐⑤뱺 �겢�씪�씠�뼵�듃�뿉寃� �쟾�넚�븳�떎  
                     		{
-                    			if(line.startsWith("WHISPER")) // 채팅의 시작부분이 WHISPER일시 WHISPER함수를 이용하게만든다 
+                    			if(line.startsWith("WHISPER")) // 梨꾪똿�쓽 �떆�옉遺�遺꾩씠 WHISPER�씪�떆 WHISPER�븿�닔瑜� �씠�슜�븯寃뚮쭔�뱺�떎 
                     				writer.println(line + " " + name);
-                    			else//아닐시 일반적인채팅기능  
+                    			else//�븘�땺�떆 �씪諛섏쟻�씤梨꾪똿湲곕뒫  
                     				writer.println("MESSAGE " + name + ": " + line);
                     		}
                     }
@@ -131,7 +131,7 @@ public class TimetableServer {
                 if (name != null)
                 {
                     names.remove(name);
-                    for (PrintWriter writer : writers) // 사용자가 나가서 스레드가 끝났음을 모든 클라이언트에게 제공 
+                    for (PrintWriter writer : writers) // �궗�슜�옄媛� �굹媛��꽌 �뒪�젅�뱶媛� �걹�궗�쓬�쓣 紐⑤뱺 �겢�씪�씠�뼵�듃�뿉寃� �젣怨� 
                     {
                 			list.remove(name);
                 			writer.println("LIST " + "- " + name);
@@ -144,7 +144,7 @@ public class TimetableServer {
                 }
                 try 
         	    		{
-        	    			socket.close(); //���� ����
+        	    			socket.close(); //占쏙옙占쏙옙 占쏙옙占쏙옙
         	    		} 
                 catch (IOException e) 
         	    		{
@@ -165,9 +165,9 @@ public class TimetableServer {
                rs = ps.executeQuery();
                if(rs.next()) {
             	   out.println("Duplicate ID");
-            	   //��� : �̹� ���ԵǾ� �ֽ��ϴ�.
+            	   //占쏙옙占� : 占싱뱄옙 占쏙옙占쌉되억옙 占쌍쏙옙占싹댐옙.
                }   
-               else { //���ο� ���̵�� ��й�ȣ DB�� ����
+               else { //占쏙옙占싸울옙 占쏙옙占싱듸옙占� 占쏙옙橘占싫� DB占쏙옙 占쏙옙占쏙옙
             	   String signUP = null;
                    signUP = "insert into id_pw values(?,?,?)";
                    ps = con.prepareStatement(signUP);
@@ -234,7 +234,7 @@ public class TimetableServer {
             try {
             	String sql = null;
             	sql = "select count(distinct instructor) from course where grade =" + Integer.parseInt(grade) + 
-            			" and semester = " +  Integer.parseInt(semester) + " and major='전필'";
+            			" and semester = " +  Integer.parseInt(semester) + " and major='�쟾�븘'";
             	ps = con.prepareStatement(sql);
             	rs = ps.executeQuery();
             	int num = 0;
@@ -242,11 +242,11 @@ public class TimetableServer {
             		num = rs.getInt(1);
             	System.out.println(num);
             	sql = "select distinct instructor from course where grade =" + Integer.parseInt(grade) + 
-            			" and semester = " +  Integer.parseInt(semester) + " and major='전필'";
+            			" and semester = " +  Integer.parseInt(semester) + " and major='�쟾�븘'";
             	ps = con.prepareStatement(sql);
             	rs = ps.executeQuery();
             	
-            	instructor[0] = "상관없음";
+            	instructor[0] = "�긽愿��뾾�쓬";
             	out.println("PROFLIST");
             	String send = Integer.toString(num);
             	out.println(send);
@@ -267,7 +267,7 @@ public class TimetableServer {
             	e.printStackTrace();
             }
         }
-        public static class Lecture{
+        public static class Lecture{ //Class object that stores the information of the lecture
     		private String course_id;
     		private String title;
     		private String major;
@@ -307,22 +307,22 @@ public class TimetableServer {
          			select[k] = new Lecture();
          		int count = 0;
         		int i = 0;
-        		float totalCredit = 0;
+        		float totalCredit = 0; //Variable to prevent excess credit
         		int checkPoint = 0;
         		int location = 0;
         		int subject = 0;
-        		int[] monday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
+        		int[] monday = new int[] {1,0,0,0,0,0,0,0,0,0,0}; //Array that stores the class times for each day of the week
         		int[] tuesday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
         		int[] wednesday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
         		int[] thursday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
         		int[] friday = new int[] {1,0,0,0,0,0,0,0,0,0,0};
         		String sql = null;
             	sql = "select * from course natural join timetable where grade = " + grade + " and semester = " + semester + " and day not in (select day from timetable where day = '" + restTime + 
-            			"') and course_id not in (select course_id from timetable where day = '" + restTime + "')";
+            			"') and course_id not in (select course_id from timetable where day = '" + restTime + "')"; //Create SQL query for user's option
     			ps = con.prepareStatement(sql);
-            	rs = ps.executeQuery();
+            	rs = ps.executeQuery(); //Store relation corresponding to SQL query
     			
-    			while(rs.next()) {
+    			while(rs.next()) { //Store each tuple in Lecture object
     				course[i].course_id = rs.getString(1);
     				if(rs.wasNull())
     					course[i].course_id = "";
@@ -367,74 +367,74 @@ public class TimetableServer {
     				i++;
     			}
     			for(int k = 0; k < i; k++) {
-    				if(course[k].instructor.equalsIgnoreCase(prof)) {
+    				if(course[k].instructor.equalsIgnoreCase(prof)) { //Part where the user selects the preferred professor's course
     					String hour;
     					hour = course[k].time;
     					int time, length, firstTime, lastTime;
     					
     					length = hour.length();
-    					firstTime = (hour.charAt(0))-'0';
+    					firstTime = (hour.charAt(0))-'0'; //Store time in integer type
     					lastTime = hour.charAt(length-1)-'0';
     					
-    					if(course[k].day.equalsIgnoreCase("월")) {
+    					if(course[k].day.equalsIgnoreCase("�썡")) { //Store the time of the course in the appropriate day
     						for(int j = firstTime; j <= lastTime; j++)
     							monday[j] = 1;
     					}
-    					else if(course[k].day.equalsIgnoreCase("화")) {
+    					else if(course[k].day.equalsIgnoreCase("�솕")) {
     						for(int j = firstTime; j <= lastTime; j++)
     							tuesday[j] = 1;
     					} 
-    					else if(course[k].day.equalsIgnoreCase("수")) {
+    					else if(course[k].day.equalsIgnoreCase("�닔")) {
     						for(int j = firstTime; j <= lastTime; j++)
     							wednesday[j] = 1;
     					}
-    					else if(course[k].day.equalsIgnoreCase("목")) {
+    					else if(course[k].day.equalsIgnoreCase("紐�")) {
     						for(int j = firstTime; j <= lastTime; j++)
     							thursday[j] = 1;
     					}
-    					else if(course[k].day.equalsIgnoreCase("금")) {
+    					else if(course[k].day.equalsIgnoreCase("湲�")) {
     						for(int j = firstTime; j <= lastTime; j++)
     							friday[j] = 1;
     					}
-    					totalCredit = totalCredit + course[k].credit;
-    					select[count] = course[k];
+    					totalCredit = totalCredit + course[k].credit; //Update totalCredit
+    					select[count] = course[k]; //Store this course in Select object
     					count++;
-    					course[k].choose = 1;
+    					course[k].choose = 1; //Selected course initializes the choose variable to 1
     					for(int s = 0; s < i; s++) {
-    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) {
+    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) { //Select the same course on different days of the week
     							hour = course[s].time;
     							length = hour.length();
-    	    					firstTime = (hour.charAt(0))-'0';
+    	    					firstTime = (hour.charAt(0))-'0'; //Store time in integer type
     	    					lastTime = hour.charAt(length-1)-'0';
     	    		
-    	    					if(course[s].day.equalsIgnoreCase("월")) {
+    	    					if(course[s].day.equalsIgnoreCase("�썡")) { //Store the time of the course in the appropriate day
     								for(int j = firstTime; j <= lastTime; j++)
     									monday[j] = 1;
     							}
-    							else if(course[s].day.equalsIgnoreCase("화")) {
+    							else if(course[s].day.equalsIgnoreCase("�솕")) {
     								for(int j = firstTime; j <= lastTime; j++)
     									tuesday[j] = 1;
     							} 
-    							else if(course[s].day.equalsIgnoreCase("수")) {
+    							else if(course[s].day.equalsIgnoreCase("�닔")) {
     								for(int j = firstTime; j <= lastTime; j++)
     									wednesday[j] = 1;
     							}
-    							else if(course[s].day.equalsIgnoreCase("목")) {
+    							else if(course[s].day.equalsIgnoreCase("紐�")) {
     								for(int j = firstTime; j <= lastTime; j++)
     									thursday[j] = 1;
     							}
-    							else if(course[s].day.equalsIgnoreCase("금")) {
+    							else if(course[s].day.equalsIgnoreCase("湲�")) {
     								for(int j = firstTime; j <= lastTime; j++)
     									friday[j] = 1;
     							}
-    							select[count] = course[s];
+    							select[count] = course[s]; //Store this course in Select object
     							count++;
-    							course[s].choose = 1;
+    							course[s].choose = 1; //Selected course initializes the choose variable to 1
     						}
     					}
     					
     					for(int s = 0; s < i; s++) {
-    						if(course[k].title.equalsIgnoreCase(course[s].title))
+    						if(course[k].title.equalsIgnoreCase(course[s].title)) //Course with the same name initializes the choose variable to 1
     							course[s].choose = 1;
     					}
     					break;
@@ -444,21 +444,21 @@ public class TimetableServer {
     			for(int k = 0; k < i; k++) {
     				String hour;
     				int time, length, firstTime, lastTime;
-    				if(course[k].major.equalsIgnoreCase("전필") && course[k].choose != 1) {			
+    				if(course[k].major.equalsIgnoreCase("�쟾�븘") && course[k].choose != 1) { //Part of the selection of courses required for major	
     					hour = course[k].time;
     					length = hour.length();
-    					firstTime = (hour.charAt(0))-'0';
+    					firstTime = (hour.charAt(0))-'0'; //Store time in integer type
     					lastTime = hour.charAt(length-1)-'0';
     		
-    					if(course[k].day.equalsIgnoreCase("월")) {
-    						if(monday[firstTime] == 0 && monday[lastTime] == 0) {	
+    					if(course[k].day.equalsIgnoreCase("�썡")) { //Store the time of the course in the appropriate day
+    						if(monday[firstTime] == 0 && monday[lastTime] == 0) { //Store if the day of the week array is empty
     							for(int j = firstTime; j <= lastTime; j++)
     								monday[j] = 1;
     						}
-    						else
+    						else //Otherwise, do not select
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("화")) {
+    					else if(course[k].day.equalsIgnoreCase("�솕")) {
     						if(tuesday[firstTime] == 0 && tuesday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								tuesday[j] = 1;
@@ -466,7 +466,7 @@ public class TimetableServer {
     						else
     							continue;
     					} 
-    					else if(course[k].day.equalsIgnoreCase("수")) {
+    					else if(course[k].day.equalsIgnoreCase("�닔")) {
     						if(wednesday[firstTime] == 0 && wednesday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								wednesday[j] = 1;
@@ -474,7 +474,7 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("목")) {
+    					else if(course[k].day.equalsIgnoreCase("紐�")) {
     						if(thursday[firstTime] == 0 && thursday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								thursday[j] = 1;
@@ -482,7 +482,7 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("금")) {
+    					else if(course[k].day.equalsIgnoreCase("湲�")) {
     						if(friday[firstTime] == 0 && friday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								friday[j] = 1;
@@ -490,32 +490,32 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					course[k].choose = 1;
+    					course[k].choose = 1; //If make a selection, initialize the choose variable to 1
     					subject = 1;
     					for(int s = 0; s < i; s++) {
-    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) {
-    							subject = 2;
+    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) { //Select the same course on different days of the week
+    							subject = 2; //If have the same course on another day of the week, set subject variable to 2
     							String hour2;
     							hour2 = course[s].time;
     							int time2, length2, firstTime2, lastTime2;
     							
     							length2 = hour2.length();
-    	    					firstTime2 = (hour2.charAt(0))-'0';
+    	    					firstTime2 = (hour2.charAt(0))-'0'; //Store time in integer type
     	    					lastTime2 = hour2.charAt(length2-1)-'0';
     	    		
-    	    					if(course[s].day.equalsIgnoreCase("월")) {
-    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) {	
+    	    					if(course[s].day.equalsIgnoreCase("�썡")) { //Store the time of the course in the appropriate day
+    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) { //Store if the day of the week array is empty
     									for(int j = firstTime2; j <= lastTime2; j++)
     										monday[j] = 1;
-    									location = s;
+    									location = s; //Save location
     								}
-    								else {
+    								else { //Otherwise, delete the previously saved course and initialize checkPoint variable to 1
     									course[k].choose = 0;
     									checkPoint = 1;
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("화")) {
+    							else if(course[s].day.equalsIgnoreCase("�솕")) {
     								if(tuesday[firstTime2] == 0 && tuesday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										tuesday[j] = 1;
@@ -527,7 +527,7 @@ public class TimetableServer {
     									break;
     								}
     							} 
-    							else if(course[s].day.equalsIgnoreCase("수")) {
+    							else if(course[s].day.equalsIgnoreCase("�닔")) {
     								if(wednesday[firstTime2] == 0 && wednesday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										wednesday[j] = 1;
@@ -539,7 +539,7 @@ public class TimetableServer {
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("목")) {
+    							else if(course[s].day.equalsIgnoreCase("紐�")) {
     								if(thursday[firstTime2] == 0 && thursday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										thursday[j] = 1;
@@ -551,7 +551,7 @@ public class TimetableServer {
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("금")) {
+    							else if(course[s].day.equalsIgnoreCase("湲�")) {
     								if(friday[firstTime2] == 0 && friday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										friday[j] = 1;
@@ -566,49 +566,49 @@ public class TimetableServer {
     						}
     					}
     					
-    					if(checkPoint == 1) {
-    						if(course[k].day.equalsIgnoreCase("월")) {	
+    					if(checkPoint == 1) { //If checkPoint is 1, an error occurs saving the second day of the class
+    						if(course[k].day.equalsIgnoreCase("�썡")) { //So have to delete the course you have chosen before
     							for(int j = firstTime; j <= lastTime; j++)
     								monday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("화")) {	
+    						else if(course[k].day.equalsIgnoreCase("�솕")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								tuesday[j] = 0;
     						} 
-    						else if(course[k].day.equalsIgnoreCase("수")) {	
+    						else if(course[k].day.equalsIgnoreCase("�닔")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								wednesday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("목")) {	
+    						else if(course[k].day.equalsIgnoreCase("紐�")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								thursday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("금")) {	
+    						else if(course[k].day.equalsIgnoreCase("湲�")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								friday[j] = 0;
     						}
-    						subject = 0;
+    						subject = 0; //If delete course, initialize the subject variable to 0
     						continue;
     					}
     					
-    					if(subject == 1) {
+    					if(subject == 1) { //If the subject variable is 1, this is a one-day class
     						totalCredit = totalCredit + course[k].credit;
     						select[count] = course[k];
     						count++;
-    						course[k].choose = 1;
+    						course[k].choose = 1; //Selected course initializes the choose variable to 1
     					}
-    					else if(subject == 2) {
+    					else if(subject == 2) { //If the subject variable is 2, this is a two-day class
     						totalCredit = totalCredit + course[k].credit;
     						select[count] = course[k];
     						count++;
     						select[count] = course[location];
     						count++;
-    						course[k].choose = 1;
+    						course[k].choose = 1; //Selected course initializes the choose variable to 1
     						course[location].choose = 1;
     					}
     					
     					for(int s = 0; s < i; s++) {
-    						if(course[k].title.equalsIgnoreCase(course[s].title))
+    						if(course[k].title.equalsIgnoreCase(course[s].title)) //Course with the same name initializes the choose variable to 1
     							course[s].choose = 1;
     					}
     					location = 0;
@@ -619,21 +619,21 @@ public class TimetableServer {
     			for(int k = 0; k < i; k++) {
     				String hour;
     				int time, length, firstTime, lastTime;
-    				if(course[k].major.equalsIgnoreCase("전필") && course[k].choose != 1) {			
+    				if(course[k].major.equalsIgnoreCase("�쟾�븘") && course[k].choose != 1) {	 //Part of the selection of courses required for liberal art
     					hour = course[k].time;
     					length = hour.length();
-    					firstTime = (hour.charAt(0))-'0';
+    					firstTime = (hour.charAt(0))-'0'; //Store time in integer type
     					lastTime = hour.charAt(length-1)-'0';
     		
-    					if(course[k].day.equalsIgnoreCase("월")) {
-    						if(monday[firstTime] == 0 && monday[lastTime] == 0) {	
+    					if(course[k].day.equalsIgnoreCase("�썡")) { //Store the time of the course in the appropriate day
+    						if(monday[firstTime] == 0 && monday[lastTime] == 0) { //Store if the day of the week array is empty
     							for(int j = firstTime; j <= lastTime; j++)
     								monday[j] = 1;
     						}
-    						else
+    						else //Otherwise, do not select
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("화")) {
+    					else if(course[k].day.equalsIgnoreCase("�솕")) {
     						if(tuesday[firstTime] == 0 && tuesday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								tuesday[j] = 1;
@@ -641,7 +641,7 @@ public class TimetableServer {
     						else
     							continue;
     					} 
-    					else if(course[k].day.equalsIgnoreCase("수")) {
+    					else if(course[k].day.equalsIgnoreCase("�닔")) {
     						if(wednesday[firstTime] == 0 && wednesday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								wednesday[j] = 1;
@@ -649,7 +649,7 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("목")) {
+    					else if(course[k].day.equalsIgnoreCase("紐�")) {
     						if(thursday[firstTime] == 0 && thursday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								thursday[j] = 1;
@@ -657,7 +657,7 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("금")) {
+    					else if(course[k].day.equalsIgnoreCase("湲�")) {
     						if(friday[firstTime] == 0 && friday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								friday[j] = 1;
@@ -665,30 +665,30 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					course[k].choose = 1;
+    					course[k].choose = 1; //If make a selection, initialize the choose variable to 1
     					subject = 1;
     					for(int s = 0; s < i; s++) {
-    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) {
-    							subject = 2;
+    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) { //Select the same course on different days of the week
+    							subject = 2; //If have the same course on another day of the week, set subject variable to 2
     							String hour2;
     							hour2 = course[s].time;
     							int time2, length2, firstTime2, lastTime2;
     							length2 = hour2.length();
-    	    					firstTime2 = (hour2.charAt(0))-'0';
+    	    					firstTime2 = (hour2.charAt(0))-'0'; //Store time in integer type
     	    					lastTime2 = hour2.charAt(length2-1)-'0';
-    	    				if(course[s].day.equalsIgnoreCase("월")) {
-    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) {	
+    	    				if(course[s].day.equalsIgnoreCase("�썡")) { //Store the time of the course in the appropriate day
+    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) { //Store if the day of the week array is empty
     									for(int j = firstTime2; j <= lastTime2; j++)
     										monday[j] = 1;
-    									location = s;
+    									location = s; //Save location
     								}
-    								else {
+    								else { //Otherwise, delete the previously saved course and initialize checkPoint variable to 1
     									course[k].choose = 0;
     									checkPoint = 1;
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("화")) {
+    							else if(course[s].day.equalsIgnoreCase("�솕")) {
     								if(tuesday[firstTime2] == 0 && tuesday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										tuesday[j] = 1;
@@ -700,7 +700,7 @@ public class TimetableServer {
     									break;
     								}
     							} 
-    							else if(course[s].day.equalsIgnoreCase("수")) {
+    							else if(course[s].day.equalsIgnoreCase("�닔")) {
     								if(wednesday[firstTime2] == 0 && wednesday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										wednesday[j] = 1;
@@ -712,7 +712,7 @@ public class TimetableServer {
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("목")) {
+    							else if(course[s].day.equalsIgnoreCase("紐�")) {
     								if(thursday[firstTime2] == 0 && thursday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										thursday[j] = 1;
@@ -724,7 +724,7 @@ public class TimetableServer {
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("금")) {
+    							else if(course[s].day.equalsIgnoreCase("湲�")) {
     								if(friday[firstTime2] == 0 && friday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										friday[j] = 1;
@@ -739,51 +739,51 @@ public class TimetableServer {
     						}
     					}
     					
-    					if(checkPoint == 1) {
-    						if(course[k].day.equalsIgnoreCase("월")) {	
+    					if(checkPoint == 1) { //If checkPoint is 1, an error occurs saving the second day of the class
+    						if(course[k].day.equalsIgnoreCase("�썡")) { //So have to delete the course you have chosen before
     							for(int j = firstTime; j <= lastTime; j++)
     								monday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("화")) {	
+    						else if(course[k].day.equalsIgnoreCase("�솕")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								tuesday[j] = 0;
     						} 
-    						else if(course[k].day.equalsIgnoreCase("수")) {	
+    						else if(course[k].day.equalsIgnoreCase("�닔")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								wednesday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("목")) {	
+    						else if(course[k].day.equalsIgnoreCase("紐�")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								thursday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("금")) {	
+    						else if(course[k].day.equalsIgnoreCase("湲�")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								friday[j] = 0;
     						}
-    						subject = 0;
+    						subject = 0; //If delete course, initialize the subject variable to 0
     						continue;
     					}
     					
-    					if((totalCredit + course[k].credit) > 17)
+    					if((totalCredit + course[k].credit) > 17) //Do not save if total credit exceeds 17 credits
     						break;
     					
-    					if(subject == 1) {
+    					if(subject == 1) { //If the subject variable is 1, this is a one-day class
     						totalCredit = totalCredit + course[k].credit;
     						select[count] = course[k];
     						count++;
-    						course[k].choose = 1;
+    						course[k].choose = 1; //Selected course initializes the choose variable to 1
     					}
-    					else if(subject == 2) {
+    					else if(subject == 2) { //If the subject variable is 2, this is a two-day class
     						totalCredit = totalCredit + course[k].credit;
     						select[count] = course[k];
     						count++;
     						select[count] = course[location];
     						count++;
-    						course[k].choose = 1;
+    						course[k].choose = 1; //Selected course initializes the choose variable to 1
     						course[location].choose = 1;
     					}
     					for(int s = 0; s < i; s++) {
-    						if(course[k].title.equalsIgnoreCase(course[s].title))
+    						if(course[k].title.equalsIgnoreCase(course[s].title)) //Course with the same name initializes the choose variable to 1
     							course[s].choose = 1;
     					}
     					location = 0;
@@ -794,21 +794,21 @@ public class TimetableServer {
     			for(int k = 0; k < i; k++) {
     				String hour;
     				int time, length, firstTime, lastTime;
-    				if(course[k].choose != 1) {			
+    				if(course[k].choose != 1) { //Part of the selection of courses for remainder courses
     					hour = course[k].time;
     					length = hour.length();
-    					firstTime = (hour.charAt(0))-'0';
+    					firstTime = (hour.charAt(0))-'0'; //Store time in integer type
     					lastTime = hour.charAt(length-1)-'0';
     		
-    					if(course[k].day.equalsIgnoreCase("월")) {
-    						if(monday[firstTime] == 0 && monday[lastTime] == 0) {	
+    					if(course[k].day.equalsIgnoreCase("�썡")) { //Store the time of the course in the appropriate day
+    						if(monday[firstTime] == 0 && monday[lastTime] == 0) { //Store if the day of the week array is empty
     							for(int j = firstTime; j <= lastTime; j++)
     								monday[j] = 1;
     						}
-    						else
+    						else //Otherwise, do not select
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("화")) {
+    					else if(course[k].day.equalsIgnoreCase("�솕")) {
     						if(tuesday[firstTime] == 0 && tuesday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								tuesday[j] = 1;
@@ -816,7 +816,7 @@ public class TimetableServer {
     						else
     							continue;
     					} 
-    					else if(course[k].day.equalsIgnoreCase("수")) {
+    					else if(course[k].day.equalsIgnoreCase("�닔")) {
     						if(wednesday[firstTime] == 0 && wednesday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								wednesday[j] = 1;
@@ -824,7 +824,7 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("목")) {
+    					else if(course[k].day.equalsIgnoreCase("紐�")) {
     						if(thursday[firstTime] == 0 && thursday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								thursday[j] = 1;
@@ -832,7 +832,7 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					else if(course[k].day.equalsIgnoreCase("금")) {
+    					else if(course[k].day.equalsIgnoreCase("湲�")) {
     						if(friday[firstTime] == 0 && friday[lastTime] == 0) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								friday[j] = 1;
@@ -840,30 +840,30 @@ public class TimetableServer {
     						else
     							continue;
     					}
-    					course[k].choose = 1;
+    					course[k].choose = 1; //If make a selection, initialize the choose variable to 1
     					subject = 1;
     					for(int s = 0; s < i; s++) {
-    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) {
-    							subject = 2;
+    						if(course[k].course_id.equalsIgnoreCase(course[s].course_id) && course[s].choose != 1) { //Select the same course on different days of the week
+    							subject = 2; //If have the same course on another day of the week, set subject variable to 2
     							String hour2;
     							hour2 = course[s].time;
     							int time2, length2, firstTime2, lastTime2;
     							length2 = hour2.length();
-    	    					firstTime2 = (hour2.charAt(0))-'0';
+    	    					firstTime2 = (hour2.charAt(0))-'0'; //Store time in integer type
     	    					lastTime2 = hour2.charAt(length2-1)-'0';
-    	    					if(course[s].day.equalsIgnoreCase("월")) {
-    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) {	
+    	    					if(course[s].day.equalsIgnoreCase("�썡")) { //Store the time of the course in the appropriate day
+    								if(monday[firstTime2] == 0 && monday[lastTime2] == 0) { //Store if the day of the week array is empty
     									for(int j = firstTime2; j <= lastTime2; j++)
     										monday[j] = 1;
-    									location = s;
+    									location = s; //Save location
     								}
-    								else {
+    								else { //Otherwise, delete the previously saved course and initialize checkPoint variable to 1
     									course[k].choose = 0;
     									checkPoint = 1;
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("화")) {
+    							else if(course[s].day.equalsIgnoreCase("�솕")) {
     								if(tuesday[firstTime2] == 0 && tuesday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										tuesday[j] = 1;
@@ -875,7 +875,7 @@ public class TimetableServer {
     									break;
     								}
     							} 
-    							else if(course[s].day.equalsIgnoreCase("수")) {
+    							else if(course[s].day.equalsIgnoreCase("�닔")) {
     								if(wednesday[firstTime2] == 0 && wednesday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										wednesday[j] = 1;
@@ -887,7 +887,7 @@ public class TimetableServer {
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("목")) {
+    							else if(course[s].day.equalsIgnoreCase("紐�")) {
     								if(thursday[firstTime2] == 0 && thursday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										thursday[j] = 1;
@@ -899,7 +899,7 @@ public class TimetableServer {
     									break;
     								}
     							}
-    							else if(course[s].day.equalsIgnoreCase("금")) {
+    							else if(course[s].day.equalsIgnoreCase("湲�")) {
     								if(friday[firstTime2] == 0 && friday[lastTime2] == 0) {	
     									for(int j = firstTime2; j <= lastTime2; j++)
     										friday[j] = 1;
@@ -914,51 +914,51 @@ public class TimetableServer {
     						}
     					}
     					
-    					if(checkPoint == 1) {
-    						if(course[k].day.equalsIgnoreCase("월")) {	
+    					if(checkPoint == 1) { //If checkPoint is 1, an error occurs saving the second day of the class
+    						if(course[k].day.equalsIgnoreCase("�썡")) { //So have to delete the course you have chosen before
     							for(int j = firstTime; j <= lastTime; j++)
     								monday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("화")) {	
+    						else if(course[k].day.equalsIgnoreCase("�솕")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								tuesday[j] = 0;
     						} 
-    						else if(course[k].day.equalsIgnoreCase("수")) {	
+    						else if(course[k].day.equalsIgnoreCase("�닔")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								wednesday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("목")) {	
+    						else if(course[k].day.equalsIgnoreCase("紐�")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								thursday[j] = 0;
     						}
-    						else if(course[k].day.equalsIgnoreCase("금")) {	
+    						else if(course[k].day.equalsIgnoreCase("湲�")) {	
     							for(int j = firstTime; j <= lastTime; j++)
     								friday[j] = 0;
     						}
-    						subject = 0;
+    						subject = 0; //If delete course, initialize the subject variable to 0
     						continue;
     					}
-    					if((totalCredit + course[k].credit) > 17)
+    					if((totalCredit + course[k].credit) > 17) //Do not save if total credit exceeds 17 credits
     						break;
     					
-    					if(subject == 1) {
+    					if(subject == 1) { //If the subject variable is 1, this is a one-day class
     						totalCredit = totalCredit + course[k].credit;
     						select[count] = course[k];
     						count++;
-    						course[k].choose = 1;
+    						course[k].choose = 1; //Selected course initializes the choose variable to 1
     					}
-    					else if(subject == 2) {
+    					else if(subject == 2) { //If the subject variable is 2, this is a two-day class
     						totalCredit = totalCredit + course[k].credit;
     						select[count] = course[k];
     						count++;
     						select[count] = course[location];
     						count++;
-    						course[k].choose = 1;
+    						course[k].choose = 1; //Selected course initializes the choose variable to 1
     						course[location].choose = 1;
     					}
     					
     					for(int s = 0; s < i; s++) {
-    						if(course[k].title.equalsIgnoreCase(course[s].title))
+    						if(course[k].title.equalsIgnoreCase(course[s].title)) //Course with the same name initializes the choose variable to 1
     							course[s].choose = 1;
     					}
     					location = 0;
@@ -966,8 +966,8 @@ public class TimetableServer {
     				}
     			}
 
-    			for(int k = 0; k < count; k++) {
-        			if(select[k].grade == 0)
+    			for(int k = 0; k < count; k++) { //Store selected courses to database
+        			if(select[k].grade == 0) //If there is no selected course, break
         				break;
     				String nsql = null;
         			nsql = "insert into takes values(?,?,?,?,?,?,?,?,?,?,?)";
