@@ -14,7 +14,6 @@ public class TimetableServer {
     private static final int PORT = 9001;
     public static String[] instructor = new String[10];
     static ArrayList<String> names = new ArrayList<String>();
-    //클占쏙옙占싱억옙트占쏙옙占쏙옙 占싱몌옙占쏙옙 占쏙옙占쏙옙占쌔놂옙占쏙옙 ArrayList
   
 	public static void main(String[] args) throws Exception{
 		System.out.println("Server start..\n");
@@ -36,9 +35,7 @@ public class TimetableServer {
     	private String restTime;
         private Socket socket;
         private BufferedReader in;
-        //클占쏙옙占싱억옙트占싸븝옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쌨깍옙 占쏙옙占쏙옙 占쏙옙占쏙옙
-        private PrintWriter out;
-        //클占쏙옙占싱언에곤옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙 占쏙옙占쏙옙        
+        private PrintWriter out;  
         
         public Handler(Socket socket) {
             this.socket = socket;
@@ -64,14 +61,12 @@ public class TimetableServer {
             	while (true) 
             	{
                     String line = in.readLine();
-                    //占쏙옙占쏙옙占싸븝옙占쏙옙 占쏙옙占쏙옙占쏙옙 占싻억옙占� line 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙
                     if (line.startsWith("SIGNUP")) 
                     {
                         id = in.readLine(); 
                         pw = in.readLine();
                         name = in.readLine();
                         signUp(id, pw, name, con);
-                        //占쏙옙占쏙옙占싸븝옙占쏙옙 占싻억옙占� 占쏙옙占쏙옙占싶곤옙 SUBMITNAME占쏙옙 占쏙옙 getName占쌉쇽옙 占싱용에 占쏙옙占쏙옙占� 占싱몌옙 占쌉뤄옙 占쏙옙占쏙옙
                     }
                     else if(line.startsWith("SIGNIN")) 
                     {
@@ -105,13 +100,13 @@ public class TimetableServer {
                     	restTime = in.readLine();
             			algorithm(con);
                     }  
-                    else//�븘�땺�떆 �씪諛섏쟻�씤梨꾪똿湲곕뒫  
+                    else
                     {
-                    		for (PrintWriter writer : writers) // 紐⑤뱺 �겢�씪�씠�뼵�듃�뿉寃� �쟾�넚�븳�떎  
+                    		for (PrintWriter writer : writers) //Send to all users
                     		{
-                    			if(line.startsWith("WHISPER")) // 梨꾪똿�쓽 �떆�옉遺�遺꾩씠 WHISPER�씪�떆 WHISPER�븿�닔瑜� �씠�슜�븯寃뚮쭔�뱺�떎 
+                    			if(line.startsWith("WHISPER"))//If the sentence begins with "WHISPER"
                     				writer.println(line + " " + name);
-                    			else//�븘�땺�떆 �씪諛섏쟻�씤梨꾪똿湲곕뒫  
+                    			else//If the sentence begins with "MESSAGE"
                     				writer.println("MESSAGE " + name + ": " + line);
                     		}
                     }
@@ -131,7 +126,7 @@ public class TimetableServer {
                 if (name != null)
                 {
                     names.remove(name);
-                    for (PrintWriter writer : writers) // �궗�슜�옄媛� �굹媛��꽌 �뒪�젅�뱶媛� �걹�궗�쓬�쓣 紐⑤뱺 �겢�씪�씠�뼵�듃�뿉寃� �젣怨� 
+                    for (PrintWriter writer : writers)//It informs the person who exited the program and deletes it from the list.
                     {
                 			list.remove(name);
                 			writer.println("LIST " + "- " + name);
@@ -144,7 +139,7 @@ public class TimetableServer {
                 }
                 try 
         	    		{
-        	    			socket.close(); //占쏙옙占쏙옙 占쏙옙占쏙옙
+        	    			socket.close();
         	    		} 
                 catch (IOException e) 
         	    		{
@@ -165,9 +160,9 @@ public class TimetableServer {
                rs = ps.executeQuery();
                if(rs.next()) {
             	   out.println("Duplicate ID");
-            	   //占쏙옙占� : 占싱뱄옙 占쏙옙占쌉되억옙 占쌍쏙옙占싹댐옙.
+    
                }   
-               else { //占쏙옙占싸울옙 占쏙옙占싱듸옙占� 占쏙옙橘占싫� DB占쏙옙 占쏙옙占쏙옙
+               else { 
             	   String signUP = null;
                    signUP = "insert into id_pw values(?,?,?)";
                    ps = con.prepareStatement(signUP);

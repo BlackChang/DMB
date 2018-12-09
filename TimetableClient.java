@@ -137,11 +137,11 @@ public class TimetableClient {
                	table.frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             	table.frame.setVisible(true);
             }
-            else if (status.startsWith("MESSAGE")) // 서버에서 "MESSAGE" 라고 시작되는 문장을받으면 MESSAGE부분을 지우고 채팅내용만을 볼수 있게된다.
+            else if (status.startsWith("MESSAGE")) // If you receive a sentence beginning with "MESSAGE" on the server, you will be able to delete the MESSAGE section and only see the chat contents.
             		DMB_TABLE.text.append(status.substring(8) + "\n");
-            else if (status.startsWith("WHISPER")) //// 서버에서 "WHISPER" 라고 시작되는 문장을받으면 WHISPER 함수를 사용한다. 
+            else if (status.startsWith("WHISPER")) // If the server receives a sentence beginning with "WHISPER", use the WHISPER function.
             		WHISPER(status);
-            else if (status.startsWith("LIST"))
+            else if (status.startsWith("LIST")) //Check the sentence beginning with "LIST" to save the number of people participating in the chat.
             		chatList(status);
         }
     }
@@ -186,29 +186,29 @@ public class TimetableClient {
     }
     private void chatList(String line) {
     		line = line.substring(5);
-    		if (line.startsWith("+")) {
+    		if (line.startsWith("+")) {// To keep a list of people logged in, delete the function LIST, and add the person when the sentence starts with +.
     			line = line.substring(2);
     			
-    			chatList.clear();
+    			chatList.clear(); // Refresh every time new personnel comes in
     			DMB_TABLE.chat_model.clear();
     			String[] s = line.split(",");
-    			if(origin.isEmpty())
+    			if(origin.isEmpty())//Add first incoming staff
     				origin = s[s.length-1];
     			
-    			for(int x=0; x < s.length;x++) {
+    			for(int x=0; x < s.length;x++) { // Processing when more than two people come in
     				chatList.add(s[x]);
     				DMB_TABLE.chat_model.addElement(chatList.get(x));
     			}
     		}
-    		else if(line.startsWith("-")) {
+    		else if(line.startsWith("-")) { // Delete the sentence's LIST and delete the person when the sentence begins.
     			line = line.substring(2);
-    			DMB_TABLE.chat_model.clear();
+    			DMB_TABLE.chat_model.clear(); // Refresh every time new personnel comes in
     			chatList.remove(line);
     			for(int x=0; x < chatList.size();x++)
     				DMB_TABLE.chat_model.addElement(chatList.get(x));
     		}
     }
-    private void WHISPER(String line) {
+    private void WHISPER(String line) {//The whisper function function sentence starts with WHISPER and then the recipient's name is stored at the end of the sender's name.
         String[] temp = line.split(" ");
 		String x = null;
 		if((temp[1].equalsIgnoreCase(origin) || temp[temp.length-1].equalsIgnoreCase(origin)) && temp[0].equals("WHISPER")) {
@@ -218,8 +218,8 @@ public class TimetableClient {
         		if(!x.isEmpty())
         			DMB_TABLE.textw.append(temp[temp.length-1] + " : " + x + "\n");
         }
-		if((temp[1].equalsIgnoreCase(origin)) && temp[0].equals("WHISPER") && !x.isEmpty())
-        		DMB_TABLE.text.append("You receive Whisper message from " + temp[temp.length-1] + "\n");//구분지은뒤 채팅을 클라이언트에 보여준다.
+		if((temp[1].equalsIgnoreCase(origin)) && temp[0].equals("WHISPER") && !x.isEmpty()) // Notify the person who is the target of the whisper function
+        		DMB_TABLE.text.append("You receive Whisper message from " + temp[temp.length-1] + "\n");//After segmenting, show the chat to the client.
     }
     public static void main(String[] args) throws Exception {
     	client  = new TimetableClient();

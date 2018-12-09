@@ -17,20 +17,19 @@ import com.mysql.jdbc.PreparedStatement;
 
 import java.awt.event.*;
 public class DMB_TABLE {
+	//Chat room frame initialize
 	static JFrame frame;
 	JFrame fr = new JFrame(TimetableClient.origin + " Chatting Room" );
 	static JTextField tf = new JTextField(20);
 	static JTextArea text = new JTextArea(10, 20);
 	static DefaultListModel<String> chat_model = new DefaultListModel<String>();
     static JList list;
-    // chat room
-	// Whisper chat room
+	// Whisper chat room initialize
 	JFrame frw = new JFrame(TimetableClient.origin + " Whisper Room" );
 	static JTextField tfw = new JTextField(20);
 	static JTextArea textw = new JTextArea(10, 20);
 	static DefaultListModel<String> modelw = new DefaultListModel<String>();
     static JList listw;
-    // chat room
 
 	public DMB_TABLE(String id, int grade, int semester) throws IOException {		
 		frame = new JFrame("시간표");
@@ -142,7 +141,7 @@ public class DMB_TABLE {
 			frame.setResizable(false);
 			table.setFont(new Font("배달의민족 도현",Font.PLAIN, 15));
 			
-			JButton chat = new JButton("채팅하기");
+			JButton chat = new JButton("채팅하기");//Declare Chat start button
 			chat.setBounds(50, 250, 200, 200);
 			panel.add(chat);
 			panel.setBackground(Color.white);
@@ -161,7 +160,7 @@ public class DMB_TABLE {
 			text.setForeground(new Color(220, 110, 70));
 			textw.setForeground(new Color(220, 110, 70));			
 			
-			list = new JList(chat_model);
+			list = new JList(chat_model);//Users name set are login.
 			list.setBackground(Color.white);
 			list.setForeground(new Color(220,110,70));
 			list.setFont(new Font("배달의민족 도현", Font.PLAIN,20));
@@ -174,31 +173,34 @@ public class DMB_TABLE {
 			fr.getContentPane().add(tf, "North");
 	        fr.getContentPane().add(new JScrollPane(text), "Center");
 	        fr.pack();
-	        tf.addActionListener(new ActionListener() {// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 			   
+	        tf.addActionListener(new ActionListener() 
+	        {	   
 	        	public void actionPerformed(ActionEvent e) {
         			TimetableClient.out.println(tf.getText());
         			tf.setText("");
         		}
 	        });
 
-	        list.addMouseListener(new MouseAdapter() {//List double click event
+	        list.addMouseListener(new MouseAdapter() {//List double click event whisper 
 	            public void mouseClicked(MouseEvent evt) { 
 		    		list = (JList)evt.getSource();
-			    	if (evt.getClickCount() == 2) { 
-			    		listw = new JList(modelw);
+			    	if (evt.getClickCount() == 2) { //When button is double-clicked
+			    		listw = new JList(modelw); 
 			    		modelw.clear();
-			    		modelw.addElement(TimetableClient.origin);
+			    		modelw.addElement(TimetableClient.origin); 
 			    		modelw.addElement(list.getSelectedValue().toString());
 			    		listw = new JList(modelw);
-						listw.setBackground(Color.white);
-						listw.setForeground(new Color(220,110,70));
-						listw.setFont(new Font("배달의민족 도현", Font.PLAIN,20));		
-						frw.setSize(1000, 300);
+			    		listw.setBackground(Color.white);
+					listw.setForeground(new Color(220,110,70));
+					listw.setFont(new Font("배달의민족 도현", Font.PLAIN,20));		
+					frw.setSize(1000, 300);
 		    			frw.getContentPane().add(listw, "East");
 		    			frw.getContentPane().add(tfw, "North");
 		    			frw.getContentPane().add(new JScrollPane(textw), "Center");
-		    			tfw.addActionListener(new ActionListener() {// 내용을입력하고 기존에 입력된 내용을 지워 새로 받을 준비한다. 
-				       		public void actionPerformed(ActionEvent e) {
+		    			tfw.addActionListener(new ActionListener() //When occur whisper messages
+		    			{
+		    				public void actionPerformed(ActionEvent e) 
+		    				{
 		            			TimetableClient.out.println("WHISPER " + list.getSelectedValue().toString() + " " + tfw.getText());
 		            			tfw.setText("");
 		            		}
