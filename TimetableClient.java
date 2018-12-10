@@ -33,6 +33,7 @@ public class TimetableClient {
 	String status="";
 	static String origin="";
 	static ArrayList<String> chatList = new ArrayList<String>();//chat member name 
+	/*
 	private String getServerAddress() {
         return JOptionPane.showInputDialog(
             frame,
@@ -40,6 +41,7 @@ public class TimetableClient {
             "Welcome to the Chatter",
             JOptionPane.QUESTION_MESSAGE);
     }
+    */
 	//GUI for input IP address
 	private void run() throws IOException, SQLException {
     	Connection con = null;
@@ -56,7 +58,7 @@ public class TimetableClient {
 			e.printStackTrace();
 		} 
 		
-		String serverAddress = getServerAddress();
+		String serverAddress = "127.0.0.1";
         Socket socket = new Socket(serverAddress, 9001);
         
         in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
